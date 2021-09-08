@@ -1,5 +1,6 @@
 package com.example.timecard;
 
+import com.example.timecard.Models.Database.DatabaseHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

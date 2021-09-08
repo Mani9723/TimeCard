@@ -1,3 +1,4 @@
+                                UI
 1) Login screen
 2) Home screen:
    a) Clock in/out:
@@ -15,3 +16,12 @@
         v) email timecard:
             A) choose particular calendar dates
    e) View current months timecard
+
+
+
+                              Database
+EMPS_TABLE:
+    Columns: firstName, lastName, empId, empPass, empStatus
+Each Employees Table:
+    Columns: shiftBegin, shiftEnd, mealBegin, mealEnd, hours, overtimeHours, grossPay,
+             overtimePay, ytdHours, ytdOvertimeHours, ytdOvertimePay, ytdGross
