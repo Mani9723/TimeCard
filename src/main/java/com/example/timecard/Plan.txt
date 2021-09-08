@@ -1,0 +1,17 @@
+1) Login screen
+2) Home screen:
+   a) Clock in/out:
+        i) automatically calculate hours
+   b) Set pay:
+        i) amount in dollars
+        ii) default to hourly pay
+        ii) Overtime pay amount calculated
+   c) Add meal breaks
+   d) View time card:
+        i) select by pay period
+        ii) select by week
+        iii) show hours, pay taxes
+        iv) save timecard to pdf
+        v) email timecard:
+            A) choose particular calendar dates
+   e) View current months timecard
