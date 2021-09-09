@@ -10,8 +10,6 @@ public class Shift
 	private TimeCard timeCard;
 	private Employee employee;
 	private LocalTime shiftDuration;
-
-
 	private LocalTime mealDuration;
 	private double grossPay;
 	private double totalHours;
