@@ -1,5 +1,7 @@
 package com.example.timecard.Models.Objects;
 
+import com.example.timecard.Utils.EmployeeIDGenerator;
+
 class Employee
 {
 	private final String firstName;
@@ -8,11 +10,11 @@ class Employee
 	private final String empPass;
 	private final double pay;
 
-	public Employee(String firstName, String lastName, long empId, String empPass, double pay)
+	public Employee(String firstName, String lastName, String empPass, double pay)
 	{
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.empId = empId;
+		this.empId = EmployeeIDGenerator.generateID();
 		this.empPass = empPass;
 		this.pay = pay;
 	}
