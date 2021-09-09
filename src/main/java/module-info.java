@@ -4,6 +4,8 @@ module com.example.timecard {
 	requires com.jfoenix;
 	requires java.sql;
 	requires org.xerial.sqlitejdbc;
+	requires java.mail;
+	requires activation;
 
 
 	opens com.example.timecard to javafx.fxml;
