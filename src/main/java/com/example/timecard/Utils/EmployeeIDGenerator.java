@@ -4,10 +4,10 @@ import java.util.Random;
 
 public final class EmployeeIDGenerator
 {
-	public static int generateID()
+	public static long generateID()
 	{
 		Random random = new Random();
-		return random.ints(700000,900000)
+		return random.longs(700000L,900000L)
 				.findFirst()
 				.orElse(-1);
 	}

@@ -6,9 +6,9 @@ import java.time.LocalTime;
 
 public class Shift
 {
-	private LocalDate date;
-	private TimeCard timeCard;
-	private Employee employee;
+	private final LocalDate date;
+	private final TimeCard timeCard;
+	private final Employee employee;
 	private LocalTime shiftDuration;
 	private LocalTime mealDuration;
 	private double grossPay;
@@ -52,7 +52,7 @@ public class Shift
 	private LocalTime calculateTimeDifference(LocalTime start, LocalTime end)
 	{
 		double tempHours = calculateTotalHoursWorked(start.toSecondOfDay()
-				-end.toSecondOfDay());
+				- end.toSecondOfDay());
 		BigDecimal bigDecimalTotalHours = new BigDecimal(tempHours);
 		int hours = bigDecimalTotalHours.intValue();
 		double decimalPart = bigDecimalTotalHours.subtract(new BigDecimal(hours)).
