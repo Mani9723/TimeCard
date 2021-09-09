@@ -130,5 +130,33 @@ public class DatabaseHandler
 		}
 	}
 
+	public boolean validateLogin(String user, String pass) throws SQLException
+	{
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String query = "SELECT * from "
+				+  DatabaseFiles.EMPS_TABLE.name()
+				+ " where username = ? and password = ?";
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,user);
+			preparedStatement.setString(2,pass);
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				return true;
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally {
+			assert preparedStatement != null;
+			preparedStatement.close();
+			assert resultSet != null;
+			resultSet.close();
+		}
+		return false;
+	}
+
 
 }
