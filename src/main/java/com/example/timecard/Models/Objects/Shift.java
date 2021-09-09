@@ -20,6 +20,7 @@ public class Shift
 		this.timeCard = timeCard;
 		this.employee = employee;
 		totalHours = 0.0;
+		calculateShiftData();
 	}
 
 	private void calculateShiftData()
