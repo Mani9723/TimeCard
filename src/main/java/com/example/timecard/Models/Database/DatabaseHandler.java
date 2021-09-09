@@ -1,9 +1,14 @@
 package com.example.timecard.Models.Database;
 
 import com.example.timecard.Models.Constants.DatabaseFiles;
+import com.example.timecard.Models.Constants.EmpTableColumns;
 import com.example.timecard.Models.Constants.MainTableColumns;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DatabaseHandler
 {
@@ -77,6 +82,32 @@ public class DatabaseHandler
 		createPrepStmtExecute(query);
 		System.out.println("Main Table created");
 
+	}
+
+	/**
+	 * Specific database table for each user.
+	 * THis table details the transaction history of the user.
+	 * @param user - Specific user
+	 * @throws SQLException - Exception
+	 */
+	public void createStatementTable(String user) throws SQLException
+	{
+		String query = "CREATE TABLE IF NOT EXISTS "+user+ " (\n"
+				+ EmpTableColumns.shiftBegin.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.shiftEnd.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.mealBegin.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.mealEnd.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.hours.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.overtimeHours.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.grossPay.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.overtimePay.name() +" text NOT NULL\n"
+				+ EmpTableColumns.ytdHours +" text NOT NULL\n"
+				+ EmpTableColumns.ytdOvertimeHours.name() +" text NOT NULL\n"
+				+ EmpTableColumns.ytdGross.name() +" text NOT NULL\n"
+				+ EmpTableColumns.ytdOvertimePay.name() +" text NOT NULL\n"
+				+")";
+		createPrepStmtExecute(query);
+		System.out.println("Statement Table created: " + user);
 	}
 
 	/**
