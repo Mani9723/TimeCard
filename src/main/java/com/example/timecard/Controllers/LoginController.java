@@ -21,9 +21,6 @@ public class LoginController implements Initializable
 {
 
 	@FXML
-	private Label welcomeText;
-
-	@FXML
 	private TextField empIdField;
 
 	@FXML
@@ -33,11 +30,21 @@ public class LoginController implements Initializable
 	private JFXButton loginButton;
 
 	@FXML
+	private JFXButton exitButton;
+
+	@FXML
 	private Label noticeLabel;
 
 	private static DatabaseHandler databaseHandler;
 	private String empId;
 	private String empPass;
+
+
+	@Override
+	public void initialize(URL url, ResourceBundle resourceBundle)
+	{
+		databaseHandler = new DatabaseHandler();
+	}
 
 	@FXML
 	void onLoginClicked(ActionEvent event)
@@ -59,13 +66,13 @@ public class LoginController implements Initializable
 		}
 	}
 
-	@Override
-	public void initialize(URL url, ResourceBundle resourceBundle)
+	@FXML
+	void onExitButtonClicked(ActionEvent event)
 	{
-		databaseHandler = new DatabaseHandler();
+		if(event.getSource().equals(exitButton)){
+			System.exit(0);
+		}
 	}
-
-
 
 	private boolean processEmployeeLogin()
 	{
