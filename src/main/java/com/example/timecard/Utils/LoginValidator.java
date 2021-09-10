@@ -14,8 +14,14 @@ public class LoginValidator
 		databaseHandler = handler;
 	}
 
-	public boolean validateLogin(String empID, String empPass) throws SQLException
+	public boolean validateLogin(int empID, String empPass)
 	{
-		return databaseHandler.validateLogin(empID,empPass);
+		try {
+			return databaseHandler.validateLogin(Integer.toString(empID),empPass);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
+
 }

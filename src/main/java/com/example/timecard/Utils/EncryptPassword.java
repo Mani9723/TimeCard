@@ -8,7 +8,7 @@ public class EncryptPassword
 {
 	private static String salt, password,securePassword;
 
-	public static String setHashPassword(String pass)
+	public static String encryptPassword(String pass)
 	{
 		salt = "lksajdhfjjd";
 		password = pass;

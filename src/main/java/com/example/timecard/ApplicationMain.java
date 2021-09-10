@@ -1,12 +1,15 @@
 package com.example.timecard;
 
 import com.example.timecard.Models.Database.DatabaseHandler;
+import com.example.timecard.Models.Objects.Employee;
+import com.example.timecard.Utils.LoginValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ApplicationMain extends Application
 {

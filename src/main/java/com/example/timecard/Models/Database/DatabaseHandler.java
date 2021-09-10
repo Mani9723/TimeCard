@@ -3,6 +3,8 @@ package com.example.timecard.Models.Database;
 import com.example.timecard.Models.Constants.DatabaseFiles;
 import com.example.timecard.Models.Constants.EmpTableColumns;
 import com.example.timecard.Models.Constants.MainTableColumns;
+import com.example.timecard.Models.Objects.Employee;
+import com.example.timecard.Utils.EncryptPassword;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -132,16 +134,17 @@ public class DatabaseHandler
 
 	public boolean validateLogin(String user, String pass) throws SQLException
 	{
+		String encrypted = EncryptPassword.encryptPassword(pass);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		String query = "SELECT * from "
 				+  DatabaseFiles.EMPS_TABLE.name()
-				+ " where username = ? and password = ?";
+				+ " where empID = ? and empPass = ?";
 
 		try{
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1,user);
-			preparedStatement.setString(2,pass);
+			preparedStatement.setString(2,encrypted);
 			resultSet = preparedStatement.executeQuery();
 			if(resultSet.next()){
 				return true;
@@ -157,6 +160,31 @@ public class DatabaseHandler
 		}
 		return false;
 	}
+
+	public void addEmployee(Employee employee) throws SQLException
+	{
+		PreparedStatement preparedStatement = null;
+
+		String query = "INSERT into EMPS_TABLE(firstName, lastName,empId,empPass,empStatus)" +
+				"VALUES(?,?,?,?,?)";
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, employee.getFirstName());
+			preparedStatement.setString(2, employee.getLastName());
+			preparedStatement.setString(3, Long.toString(employee.getEmpId()));
+			preparedStatement.setString(4, employee.getEmpPass());
+			preparedStatement.setString(5, "Employed");
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			assert preparedStatement != null;
+			preparedStatement.close();
+		}
+	}
+
+
 
 
 }

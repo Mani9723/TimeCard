@@ -1,8 +1,9 @@
 package com.example.timecard.Models.Objects;
 
 import com.example.timecard.Utils.EmployeeIDGenerator;
+import com.example.timecard.Utils.EncryptPassword;
 
-class Employee
+public class Employee
 {
 	private final String firstName;
 	private final String lastName;
@@ -15,7 +16,7 @@ class Employee
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.empId = EmployeeIDGenerator.generateID();
-		this.empPass = empPass;
+		this.empPass = EncryptPassword.encryptPassword(empPass);
 		this.pay = pay;
 	}
 
