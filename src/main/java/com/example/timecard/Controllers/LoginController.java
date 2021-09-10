@@ -9,6 +9,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,6 +22,8 @@ import java.util.ResourceBundle;
  */
 public class LoginController implements Initializable
 {
+	@FXML
+	private GridPane gridPane;
 
 	@FXML
 	private TextField empIdField;
@@ -44,25 +49,23 @@ public class LoginController implements Initializable
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
 		databaseHandler = new DatabaseHandler();
+		exitButton.requestFocus();
+
 	}
 
 	@FXML
 	void onLoginClicked(ActionEvent event)
 	{
 		if(event.getSource().equals(loginButton)){
-			if(empIdField.getText().length()>1
-					&& empPassField.getText().length()>1){
-				empId = empIdField.getText();
-				empPass = empPassField.getText();
-				boolean result = processEmployeeLogin();
-				if(result){
-					noticeLabel.setText("Success!");
-				}else{
-					noticeLabel.setText("Invalid Logon");
-				}
-			}else{
-				noticeLabel.setText("Please Fill out both fields!");
-			}
+			validateUserInput();
+		}
+	}
+
+	@FXML
+	public void onEnterKeyReleased(KeyEvent keyEvent)
+	{
+		if(keyEvent.getCode().equals(KeyCode.ENTER)){
+			validateUserInput();
 		}
 	}
 
@@ -71,6 +74,23 @@ public class LoginController implements Initializable
 	{
 		if(event.getSource().equals(exitButton)){
 			System.exit(0);
+		}
+	}
+
+	private void validateUserInput()
+	{
+		if(empIdField.getText().length()>1
+				&& empPassField.getText().length()>1){
+			empId = empIdField.getText();
+			empPass = empPassField.getText();
+			boolean result = processEmployeeLogin();
+			if(result){
+				noticeLabel.setText("Success!");
+			}else{
+				noticeLabel.setText("Invalid Logon");
+			}
+		}else{
+			noticeLabel.setText("Please Fill out both fields!");
 		}
 	}
 
