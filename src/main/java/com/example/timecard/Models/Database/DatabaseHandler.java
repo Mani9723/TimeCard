@@ -4,6 +4,8 @@ import com.example.timecard.Models.Constants.DatabaseFiles;
 import com.example.timecard.Models.Constants.EmpTableColumns;
 import com.example.timecard.Models.Constants.MainTableColumns;
 import com.example.timecard.Models.Objects.Employee;
+import com.example.timecard.Models.Objects.Shift;
+import com.example.timecard.Models.Objects.TimeCard;
 import com.example.timecard.Utils.EncryptPassword;
 
 import java.sql.Connection;
@@ -11,6 +13,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class DatabaseHandler
 {
@@ -93,21 +96,22 @@ public class DatabaseHandler
 	 * @param user - Specific user
 	 * @throws SQLException - Exception
 	 */
-	public void createStatementTable(String user) throws SQLException
+	public void createEmployeeShiftTable(String user) throws SQLException
 	{
-		String query = "CREATE TABLE IF NOT EXISTS "+user+ " (\n"
+		String query = "CREATE TABLE IF NOT EXISTS employee_"+user+ " (\n"
+				+                    "id INTEGER PRIMARY KEY NOT NULL UNIQUE,\n"
 				+ EmpTableColumns.shiftBegin.name() +" text NOT NULL,\n"
 				+ EmpTableColumns.shiftEnd.name() +" text NOT NULL,\n"
-				+ EmpTableColumns.mealBegin.name() +" text NOT NULL,\n"
-				+ EmpTableColumns.mealEnd.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.mealBegin.name() +" text,\n"
+				+ EmpTableColumns.mealEnd.name() +" text ,\n"
 				+ EmpTableColumns.hours.name() +" text NOT NULL,\n"
-				+ EmpTableColumns.overtimeHours.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.overtimeHours.name() +" text ,\n"
 				+ EmpTableColumns.grossPay.name() +" text NOT NULL,\n"
-				+ EmpTableColumns.overtimePay.name() +" text NOT NULL\n"
-				+ EmpTableColumns.ytdHours +" text NOT NULL\n"
-				+ EmpTableColumns.ytdOvertimeHours.name() +" text NOT NULL\n"
-				+ EmpTableColumns.ytdGross.name() +" text NOT NULL\n"
-				+ EmpTableColumns.ytdOvertimePay.name() +" text NOT NULL\n"
+				+ EmpTableColumns.overtimePay.name() +" text \n"
+				+ EmpTableColumns.ytdHours +" text \n"
+				+ EmpTableColumns.ytdOvertimeHours.name() +" text \n"
+				+ EmpTableColumns.ytdGross.name() +" text \n"
+				+ EmpTableColumns.ytdOvertimePay.name() +" text \n"
 				+")";
 		createPrepStmtExecute(query);
 		System.out.println("Statement Table created: " + user);
@@ -162,7 +166,7 @@ public class DatabaseHandler
 		return false;
 	}
 
-	public void addEmployee(Employee employee) throws SQLException
+	private void addEmployee(Employee employee) throws SQLException
 	{
 		PreparedStatement preparedStatement = null;
 
@@ -177,6 +181,7 @@ public class DatabaseHandler
 			preparedStatement.setString(4, employee.getEmpPass());
 			preparedStatement.setString(5, "Employed");
 			preparedStatement.executeUpdate();
+			createEmployeeShiftTable(Long.toString(employee.getEmpId()));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -185,6 +190,34 @@ public class DatabaseHandler
 		}
 	}
 
+	public boolean addShift(Shift shift) throws SQLException
+	{
+		PreparedStatement preparedStatement = null;
+		String query = "INSERT INTO employee_" + "780643" + "(shiftBegin, shiftEnd, hours,grossPay) " +
+				"VALUES(?,?,?,?)";
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,shift.getTimeCard().getShiftBegin().toString());
+			preparedStatement.setString(2,shift.getTimeCard().getShiftEnd().toString());
+			preparedStatement.setString(3,shift.getShiftDuration().toString());
+			preparedStatement.setString(4,Double.toString(shift.getGrossPay()));
+			preparedStatement.execute();
+		} finally {
+			assert preparedStatement != null;
+			preparedStatement.close();
+		}
+
+		System.out.println(query);
+		return true;
+	}
+
+	public static void main(String[] args) throws SQLException
+	{
+		DatabaseHandler databaseHandler = new DatabaseHandler();
+		databaseHandler.addShift(null);
+
+	}
 
 
 

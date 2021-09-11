@@ -63,6 +63,11 @@ public class Shift
 		return LocalTime.of(hours,min);
 	}
 
+	public Employee getEmployee()
+	{
+		return this.employee;
+	}
+
 	public LocalDate getDate()
 	{
 		return date;
