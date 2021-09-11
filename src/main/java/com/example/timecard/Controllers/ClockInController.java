@@ -1,11 +1,9 @@
 package com.example.timecard.Controllers;
 
+import com.example.timecard.Controllers.ControllerUtil.SceneTransitioner;
 import com.example.timecard.Models.Database.DatabaseHandler;
 import com.example.timecard.Utils.Clock;
 import com.jfoenix.controls.JFXButton;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -83,6 +81,8 @@ public class ClockInController implements Initializable
 	public void init(DatabaseHandler database)
 	{
 		databaseHandler = database;
+		databaseHandler.isDBConnected();
+
 	}
 
 	@FXML
@@ -94,13 +94,16 @@ public class ClockInController implements Initializable
 		if(event.getSource().equals(clockInButton)){
 			setSelectionHighlight(clockInRect);
 			removeSelectionHighlight(clockOutRect,mealInRect,mealOutRect);
-		}else if(event.getSource().equals(clockOutButton)){
+		}
+		else if(event.getSource().equals(clockOutButton)){
 			setSelectionHighlight(clockOutRect);
 			removeSelectionHighlight(clockInRect,mealInRect,mealOutRect);
-		}else if(event.getSource().equals(mealInButton)){
+		}
+		else if(event.getSource().equals(mealInButton)){
 			setSelectionHighlight(mealInRect);
 			removeSelectionHighlight(clockOutRect,clockInRect,mealOutRect);
-		}else if(event.getSource().equals(mealOutButton)){
+		}
+		else if(event.getSource().equals(mealOutButton)){
 			setSelectionHighlight(mealOutRect);
 			removeSelectionHighlight(clockOutRect,mealInRect,clockInRect);
 		}
@@ -128,7 +131,8 @@ public class ClockInController implements Initializable
 	@FXML
 	void onEmployeeLoginClicked(ActionEvent event)
 	{
-
+		SceneTransitioner sceneTransitioner = new SceneTransitioner();
+		sceneTransitioner.loadLoginScene(event, databaseHandler);
 	}
 
 	@FXML

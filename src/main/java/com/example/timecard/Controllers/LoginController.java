@@ -1,5 +1,6 @@
 package com.example.timecard.Controllers;
 
+import com.example.timecard.Controllers.ControllerUtil.SceneTransitioner;
 import com.example.timecard.Models.Database.DatabaseHandler;
 import com.example.timecard.Utils.Clock;
 import com.example.timecard.Utils.LoginValidator;
@@ -48,6 +49,9 @@ public class LoginController implements Initializable
 	private JFXButton exitButton;
 
 	@FXML
+	private JFXButton loginReturnButton;
+
+	@FXML
 	private Label noticeLabel;
 
 	@FXML
@@ -61,14 +65,15 @@ public class LoginController implements Initializable
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
-		databaseHandler = new DatabaseHandler();
 		exitButton.requestFocus();
 		Clock.startClock(timeLabel);
 
 	}
 
-	private void initClock() {
-
+	public void init(DatabaseHandler database)
+	{
+		databaseHandler = database;
+		databaseHandler.isDBConnected();
 	}
 
 
@@ -99,6 +104,15 @@ public class LoginController implements Initializable
 	{
 		if(event.getSource().equals(exitButton)){
 			System.exit(0);
+		}
+	}
+
+	@FXML
+	public void onReturnButtonClicked(ActionEvent event)
+	{
+		if(event.getSource().equals(loginReturnButton)){
+			SceneTransitioner sceneTransitioner = new SceneTransitioner();
+			sceneTransitioner.loadClockInScene(event,databaseHandler);
 		}
 	}
 

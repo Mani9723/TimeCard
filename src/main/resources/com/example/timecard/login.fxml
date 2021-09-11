@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -71,33 +72,51 @@
                                  </color>
                               </InnerShadow>
                            </effect></PasswordField>
-                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#008fff" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="2">
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#77c4ff" height="25.0" stroke="WHITE" strokeType="INSIDE" width="129.0" GridPane.rowIndex="2">
                                     <effect>
-                                        <GaussianBlur radius="36.5" />
+                                        <GaussianBlur radius="18.0" />
                                     </effect>
+                           <GridPane.margin>
+                              <Insets left="40.0" />
+                           </GridPane.margin>
                                 </Rectangle>
-                                <JFXButton fx:id="loginButton" buttonType="RAISED" onAction="#onLoginClicked" prefHeight="25.0" prefWidth="245.0" text="Login" GridPane.rowIndex="2">
+                                <JFXButton fx:id="loginButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#onLoginClicked" prefHeight="38.0" prefWidth="129.0" text="Login" GridPane.rowIndex="2">
                            <font>
-                              <Font size="17.0" />
-                           </font></JFXButton>
+                              <Font size="16.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="37.0" />
+                           </GridPane.margin></JFXButton>
                                 <Label fx:id="noticeLabel" alignment="CENTER" prefHeight="32.0" prefWidth="208.0" textFill="WHITE" GridPane.rowIndex="4">
                            <font>
                               <Font size="17.0" />
                            </font></Label>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00ebff" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="3">
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00ceff" height="25.0" stroke="WHITE" strokeType="INSIDE" width="129.0" GridPane.rowIndex="3">
                            <effect>
-                              <GaussianBlur radius="36.5" />
+                              <GaussianBlur radius="18.0" />
                            </effect>
+                           <GridPane.margin>
+                              <Insets left="40.0" />
+                           </GridPane.margin>
                         </Rectangle>
-                        <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#onRegisterClicked" prefHeight="25.0" prefWidth="245.0" text="Register" GridPane.rowIndex="3">
+                        <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#onRegisterClicked" prefHeight="38.0" prefWidth="129.0" text="New Employee" GridPane.rowIndex="3">
                            <font>
-                              <Font size="17.0" />
+                              <Font size="16.0" />
                            </font>
+                           <GridPane.margin>
+                              <Insets left="40.0" />
+                           </GridPane.margin>
                         </JFXButton>
                             </children>
                         </GridPane>
                     </children>
                 </VBox>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="25.0" layoutX="24.0" layoutY="32.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="66.0">
+               <effect>
+                  <GaussianBlur />
+               </effect>
+            </Rectangle>
+            <JFXButton fx:id="loginReturnButton" buttonType="RAISED" layoutX="24.0" layoutY="32.0" onAction="#onReturnButtonClicked" prefHeight="25.0" prefWidth="66.0" text="Return" />
             </children>
         </AnchorPane>
     </children>

@@ -1,5 +1,7 @@
 package com.example.timecard;
 
+import com.example.timecard.Controllers.ClockInController;
+import com.example.timecard.Models.Constants.FxmlFilePaths;
 import com.example.timecard.Models.Database.DatabaseHandler;
 import com.example.timecard.Models.Objects.Employee;
 import com.example.timecard.Utils.LoginValidator;
@@ -21,13 +23,17 @@ public class ApplicationMain extends Application
 	@Override
 	public void start(Stage stage) throws IOException
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("clockInScreen.fxml"));
+		DatabaseHandler databaseHandler = new DatabaseHandler();
+		databaseHandler.isDBConnected();
+		FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain
+				.class.getResource(FxmlFilePaths.clockInScreen.toString()));
 		Scene scene = new Scene(fxmlLoader.load(), 600, 500);
+		ClockInController clockInController = fxmlLoader.getController();
+		clockInController.init(databaseHandler);
 		stage.setTitle("Time Card");
 		stage.setResizable(false);
 		stage.initStyle(StageStyle.UNDECORATED);
 		stage.setScene(scene);
-
 
 		//grab your root here
 		scene.setOnMousePressed(event -> {

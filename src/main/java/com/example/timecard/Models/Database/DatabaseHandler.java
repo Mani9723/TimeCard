@@ -62,6 +62,7 @@ public class DatabaseHandler
 
 	public boolean isDBConnected()
 	{
+		System.out.println("connnected");
 		return isDBConnected;
 	}
 

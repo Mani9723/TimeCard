@@ -11,11 +11,11 @@ import java.time.format.DateTimeFormatter;
 
 public class Clock
 {
-	public static Timeline startClock(Label clockScreentimeLabel)
+	public static Timeline startClock(Label timeLabel)
 	{
 		Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm:ss");
-			clockScreentimeLabel.setText(LocalDateTime.now().format(formatter));
+			timeLabel.setText(LocalDateTime.now().format(formatter));
 		}), new KeyFrame(Duration.seconds(1)));
 		clock.setCycleCount(Animation.INDEFINITE);
 		clock.play();
