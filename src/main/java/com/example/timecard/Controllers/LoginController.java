@@ -1,6 +1,7 @@
 package com.example.timecard.Controllers;
 
 import com.example.timecard.Models.Database.DatabaseHandler;
+import com.example.timecard.Utils.Clock;
 import com.example.timecard.Utils.LoginValidator;
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.Animation;
@@ -62,18 +63,12 @@ public class LoginController implements Initializable
 	{
 		databaseHandler = new DatabaseHandler();
 		exitButton.requestFocus();
-		initClock();
+		Clock.startClock(timeLabel);
 
 	}
 
 	private void initClock() {
 
-		Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm:ss");
-			timeLabel.setText(LocalDateTime.now().format(formatter));
-		}), new KeyFrame(Duration.seconds(1)));
-		clock.setCycleCount(Animation.INDEFINITE);
-		clock.play();
 	}
 
 

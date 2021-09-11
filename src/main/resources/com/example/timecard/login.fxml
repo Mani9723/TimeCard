@@ -18,20 +18,30 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane alignment="CENTER" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.timecard.Controllers.LoginController">
+<StackPane alignment="CENTER" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.timecard.Controllers.LoginController">
     <children>
-        <AnchorPane prefHeight="500.0" prefWidth="500.0">
+        <AnchorPane prefHeight="500.0" prefWidth="600.0">
             <children>
-            <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ImageView fitHeight="500.0" fitWidth="600.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
-                  <Image url="@Images/homebg.jpg" />
+                  <Image url="@Images/grass-wallpaper-1.jpg" />
                </image>
             </ImageView>
-                <JFXButton fx:id="exitButton" layoutX="454.0" layoutY="14.0" onAction="#onExitButtonClicked" text="X" textFill="WHITE">
+            <Label layoutX="216.0" layoutY="30.0" text="Time Card Systems" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="timeLabel" layoutX="220.0" layoutY="90.0" prefHeight="21.0" prefWidth="167.0" textFill="WHITE">
+               <font>
+                  <Font name="Consolas" size="17.0" />
+               </font>
+            </Label>
+                <JFXButton fx:id="exitButton" layoutX="554.0" layoutY="14.0" onAction="#onExitButtonClicked" text="X" textFill="WHITE" AnchorPane.bottomAnchor="455.3333333333333" AnchorPane.leftAnchor="554.0" AnchorPane.rightAnchor="14.666666666666668" AnchorPane.topAnchor="14.0">
                <font>
                   <Font name="Lucida Sans Italic" size="16.0" />
                </font></JFXButton>
-                <VBox layoutX="148.0" layoutY="165.0" prefHeight="195.0" prefWidth="203.0">
+                <VBox layoutX="198.0" layoutY="162.0" prefHeight="195.0" prefWidth="203.0">
                     <children>
                         <GridPane fx:id="gridPane" prefHeight="201.0" prefWidth="203.0">
                             <columnConstraints>
@@ -61,7 +71,7 @@
                                  </color>
                               </InnerShadow>
                            </effect></PasswordField>
-                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00ff1d" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="2">
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#008fff" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="2">
                                     <effect>
                                         <GaussianBlur radius="36.5" />
                                     </effect>
@@ -74,7 +84,7 @@
                            <font>
                               <Font size="17.0" />
                            </font></Label>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#08ff00" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="3">
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00ebff" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="3">
                            <effect>
                               <GaussianBlur radius="36.5" />
                            </effect>
@@ -88,16 +98,6 @@
                         </GridPane>
                     </children>
                 </VBox>
-            <Label layoutX="166.0" layoutY="30.0" text="Time Card Systems" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label fx:id="timeLabel" layoutX="170.0" layoutY="97.0" textFill="WHITE">
-               <font>
-                  <Font name="Consolas" size="17.0" />
-               </font>
-            </Label>
             </children>
         </AnchorPane>
     </children>

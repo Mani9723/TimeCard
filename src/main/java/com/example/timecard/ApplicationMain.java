@@ -21,8 +21,8 @@ public class ApplicationMain extends Application
 	@Override
 	public void start(Stage stage) throws IOException
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("login.fxml"));
-		Scene scene = new Scene(fxmlLoader.load(), 500, 500);
+		FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain.class.getResource("clockInScreen.fxml"));
+		Scene scene = new Scene(fxmlLoader.load(), 600, 500);
 		stage.setTitle("Time Card");
 		stage.setResizable(false);
 		stage.initStyle(StageStyle.UNDECORATED);
