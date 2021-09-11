@@ -29,9 +29,9 @@
             </ImageView>
                 <JFXButton fx:id="exitButton" layoutX="454.0" layoutY="14.0" onAction="#onExitButtonClicked" text="X" textFill="WHITE">
                <font>
-                  <Font name="Book Antiqua Italic" size="16.0" />
+                  <Font name="Lucida Sans Italic" size="16.0" />
                </font></JFXButton>
-                <VBox layoutX="148.0" layoutY="152.0" prefHeight="195.0" prefWidth="203.0">
+                <VBox layoutX="148.0" layoutY="165.0" prefHeight="195.0" prefWidth="203.0">
                     <children>
                         <GridPane fx:id="gridPane" prefHeight="201.0" prefWidth="203.0">
                             <columnConstraints>
@@ -42,13 +42,9 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0032ff" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="2">
-                                    <effect>
-                                        <GaussianBlur radius="36.5" />
-                                    </effect>
-                                </Rectangle>
                                 <TextField fx:id="empIdField" alignment="CENTER" promptText="Employee ID">
                            <effect>
                               <InnerShadow>
@@ -65,15 +61,43 @@
                                  </color>
                               </InnerShadow>
                            </effect></PasswordField>
-                                <JFXButton fx:id="loginButton" buttonType="RAISED" onAction="#onLoginClicked" prefHeight="25.0" prefWidth="245.0" text="Login" textFill="WHITE" GridPane.rowIndex="2">
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00ff1d" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="2">
+                                    <effect>
+                                        <GaussianBlur radius="36.5" />
+                                    </effect>
+                                </Rectangle>
+                                <JFXButton fx:id="loginButton" buttonType="RAISED" onAction="#onLoginClicked" prefHeight="25.0" prefWidth="245.0" text="Login" GridPane.rowIndex="2">
                            <font>
                               <Font size="17.0" />
                            </font></JFXButton>
-                                <Label fx:id="noticeLabel" alignment="CENTER" prefHeight="32.0" prefWidth="208.0" GridPane.rowIndex="3" />
+                                <Label fx:id="noticeLabel" alignment="CENTER" prefHeight="32.0" prefWidth="208.0" textFill="WHITE" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="17.0" />
+                           </font></Label>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#08ff00" height="25.0" stroke="WHITE" strokeType="INSIDE" width="204.0" GridPane.rowIndex="3">
+                           <effect>
+                              <GaussianBlur radius="36.5" />
+                           </effect>
+                        </Rectangle>
+                        <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#onRegisterClicked" prefHeight="25.0" prefWidth="245.0" text="Register" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </JFXButton>
                             </children>
                         </GridPane>
                     </children>
                 </VBox>
+            <Label layoutX="166.0" layoutY="30.0" text="Time Card Systems" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="timeLabel" layoutX="170.0" layoutY="97.0" textFill="WHITE">
+               <font>
+                  <Font name="Consolas" size="17.0" />
+               </font>
+            </Label>
             </children>
         </AnchorPane>
     </children>
