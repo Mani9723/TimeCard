@@ -7,7 +7,7 @@ public class Employee
 {
 	private final String firstName;
 	private final String lastName;
-	private final long empId;
+	private long empId;
 	private final String empPass;
 	private final double pay;
 
@@ -33,6 +33,11 @@ public class Employee
 	public long getEmpId()
 	{
 		return empId;
+	}
+
+	public void setEmpId(Long id)
+	{
+		this.empId = id;
 	}
 
 	public String getEmpPass()

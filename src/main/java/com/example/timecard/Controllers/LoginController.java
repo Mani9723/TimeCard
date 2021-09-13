@@ -58,6 +58,7 @@ public class LoginController implements Initializable
 	private Label timeLabel;
 
 	private static DatabaseHandler databaseHandler;
+	private static SceneTransitioner sceneTransitioner;
 	private String empId;
 	private String empPass;
 
@@ -67,6 +68,7 @@ public class LoginController implements Initializable
 	{
 		exitButton.requestFocus();
 		Clock.startClock(timeLabel);
+		sceneTransitioner = new SceneTransitioner();
 
 	}
 
@@ -96,7 +98,7 @@ public class LoginController implements Initializable
 	@FXML
 	public void onRegisterClicked(ActionEvent event)
 	{
-		noticeLabel.setText("Register Button Clicked");
+		sceneTransitioner.loadRegisterScene(event,databaseHandler);
 	}
 
 	@FXML
@@ -111,7 +113,6 @@ public class LoginController implements Initializable
 	public void onReturnButtonClicked(ActionEvent event)
 	{
 		if(event.getSource().equals(loginReturnButton)){
-			SceneTransitioner sceneTransitioner = new SceneTransitioner();
 			sceneTransitioner.loadClockInScene(event,databaseHandler);
 		}
 	}

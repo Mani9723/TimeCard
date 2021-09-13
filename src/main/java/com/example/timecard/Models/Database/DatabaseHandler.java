@@ -5,7 +5,6 @@ import com.example.timecard.Models.Constants.EmpTableColumns;
 import com.example.timecard.Models.Constants.MainTableColumns;
 import com.example.timecard.Models.Objects.Employee;
 import com.example.timecard.Models.Objects.Shift;
-import com.example.timecard.Models.Objects.TimeCard;
 import com.example.timecard.Utils.EncryptPassword;
 
 import java.sql.Connection;
@@ -13,14 +12,13 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 public class DatabaseHandler
 {
 
 	private static boolean isDBConnected = false;
 	private static final String FILE_PATH = DatabaseFiles.MAIN_DB_FILE_PATH.toString();
-	private static final String SQL_FILE = DatabaseFiles.EMPLOYEE_DATABASE.toString();
+	private static final String SQL_FILE = DatabaseFiles.EMPLOYEE_DATABASE_FILE_NAME.toString();
 	private static final String TABLE_NAME = DatabaseFiles.EMPS_TABLE.name();
 	private static Connection connection;
 
@@ -65,7 +63,7 @@ public class DatabaseHandler
 
 	public boolean isDBConnected()
 	{
-		System.out.println("connnected");
+		System.out.println(connection.toString());
 		return isDBConnected;
 	}
 
@@ -96,7 +94,7 @@ public class DatabaseHandler
 	 * @param user - Specific user
 	 * @throws SQLException - Exception
 	 */
-	public void createEmployeeShiftTable(String user) throws SQLException
+	public void createNewEmployeeShiftTable(String user) throws SQLException
 	{
 		String query = "CREATE TABLE IF NOT EXISTS employee_"+user+ " (\n"
 				+                    "id INTEGER PRIMARY KEY NOT NULL UNIQUE,\n"
@@ -166,7 +164,7 @@ public class DatabaseHandler
 		return false;
 	}
 
-	private void addEmployee(Employee employee) throws SQLException
+	public void addNewEmployee(Employee employee) throws SQLException
 	{
 		PreparedStatement preparedStatement = null;
 
@@ -181,7 +179,7 @@ public class DatabaseHandler
 			preparedStatement.setString(4, employee.getEmpPass());
 			preparedStatement.setString(5, "Employed");
 			preparedStatement.executeUpdate();
-			createEmployeeShiftTable(Long.toString(employee.getEmpId()));
+			createNewEmployeeShiftTable(Long.toString(employee.getEmpId()));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -193,7 +191,7 @@ public class DatabaseHandler
 	public boolean addShift(Shift shift) throws SQLException
 	{
 		PreparedStatement preparedStatement = null;
-		String query = "INSERT INTO employee_" + "780643" + "(shiftBegin, shiftEnd, hours,grossPay) " +
+		String query = "INSERT INTO employee_" + shift.getEmployee().getEmpId() + "(shiftBegin, shiftEnd, hours,grossPay) " +
 				"VALUES(?,?,?,?)";
 
 		try{
@@ -212,11 +210,37 @@ public class DatabaseHandler
 		return true;
 	}
 
-	public static void main(String[] args) throws SQLException
+	public boolean usernameExists(String user)
 	{
-		DatabaseHandler databaseHandler = new DatabaseHandler();
-		databaseHandler.addShift(null);
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String query = "SELECT * from "+DatabaseFiles.EMPS_TABLE.name()+" where empId = ?";
 
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,user);
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				if(resultSet.getString("empId").equalsIgnoreCase(user))
+					return true;
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			assert preparedStatement != null;
+			try {
+				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			assert resultSet != null;
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
 	}
 
 

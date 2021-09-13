@@ -10,7 +10,7 @@ public enum DatabaseFiles
 		}
 	},
 
-	EMPLOYEE_DATABASE{
+	EMPLOYEE_DATABASE_FILE_NAME {
 		@Override
 		public String toString()
 		{

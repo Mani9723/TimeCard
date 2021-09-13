@@ -11,5 +11,6 @@ module com.example.timecard {
 	opens com.example.timecard to javafx.fxml;
 	exports com.example.timecard;
 	exports com.example.timecard.Controllers;
+	exports com.example.timecard.Models.Database;
 	opens com.example.timecard.Controllers to javafx.fxml;
 }

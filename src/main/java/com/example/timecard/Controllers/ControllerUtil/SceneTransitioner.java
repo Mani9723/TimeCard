@@ -3,6 +3,7 @@ package com.example.timecard.Controllers.ControllerUtil;
 import com.example.timecard.ApplicationMain;
 import com.example.timecard.Controllers.ClockInController;
 import com.example.timecard.Controllers.LoginController;
+import com.example.timecard.Controllers.NewEmployeeController;
 import com.example.timecard.Models.Constants.FxmlFilePaths;
 import com.example.timecard.Models.Database.DatabaseHandler;
 import javafx.event.ActionEvent;
@@ -63,6 +64,27 @@ public class SceneTransitioner
 		homeWindow.setScene(currScene);
 		homeWindow.show();
 
+	}
+
+	public void loadRegisterScene(ActionEvent actionEvent, DatabaseHandler databaseHandler)
+	{
+		FXMLLoader loader = new FXMLLoader(ApplicationMain.class.getResource("registerScene.fxml"));
+		Parent parent = null;
+		try {
+			parent = loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		assert parent != null;
+		Scene currScene = new Scene(parent);
+		NewEmployeeController controller = loader.getController();
+		controller.init(databaseHandler);
+		Stage homeWindow = (Stage)((Node)actionEvent.getSource())
+				.getScene()
+				.getWindow();
+		allowDragableScene(parent,homeWindow);
+		homeWindow.setScene(currScene);
+		homeWindow.show();
 	}
 
 	private void allowDragableScene(Parent parent, Stage stage)
