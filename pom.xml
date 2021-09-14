@@ -76,6 +76,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>com.example.timecard/com.example.timecard.ApplicationMain</mainClass>
+                            <classifier>javadoc</classifier>
                         </configuration>
                     </execution>
                 </executions>
