@@ -21,13 +21,13 @@
                   <Image url="@Images/grass-wallpaper-1.jpg" />
                </image>
             </ImageView>
-                <JFXButton fx:id="clockInExitButton" layoutX="553.0" layoutY="14.0" onAction="#onExitClicked" prefHeight="25.0" prefWidth="32.0" text="X" AnchorPane.bottomAnchor="461.0" AnchorPane.leftAnchor="553.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="14.0" />
-                <Label layoutX="216.0" layoutY="30.0" text="Time Card Systems" textFill="WHITE">
+                <JFXButton fx:id="clockInExitButton" layoutX="553.0" layoutY="14.0" onAction="#onExitClicked" prefHeight="25.0" prefWidth="32.0" text="X" AnchorPane.bottomAnchor="461" AnchorPane.leftAnchor="553" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="14" />
+                <Label alignment="CENTER" layoutX="155.0" layoutY="22.0" prefHeight="35.0" prefWidth="190.0" text="Time Card Systems"  textFill="white" AnchorPane.bottomAnchor="443" AnchorPane.leftAnchor="155" AnchorPane.rightAnchor="155" AnchorPane.topAnchor="22">
                     <font>
                         <Font size="20.0" />
                     </font>
                 </Label>
-                <Label fx:id="clockScreentimeLabel" layoutX="220.0" layoutY="90.0" prefHeight="21.0" prefWidth="167.0" textFill="WHITE">
+                <Label fx:id="clockScreentimeLabel" layoutX="215.0" layoutY="90.0" prefHeight="21.0" prefWidth="210.0" text="time label placeholder" textFill="WHITE" AnchorPane.bottomAnchor="388" AnchorPane.leftAnchor="215" AnchorPane.rightAnchor="175" AnchorPane.topAnchor="90">
                     <font>
                         <Font name="Consolas" size="17.0" />
                     </font>

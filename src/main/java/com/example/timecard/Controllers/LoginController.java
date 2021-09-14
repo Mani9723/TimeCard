@@ -98,7 +98,9 @@ public class LoginController implements Initializable
 	@FXML
 	public void onRegisterClicked(ActionEvent event)
 	{
-		sceneTransitioner.loadRegisterScene(event,databaseHandler);
+		if(event.getSource().equals(registerButton)) {
+			sceneTransitioner.loadRegisterScene(event, databaseHandler);
+		}
 	}
 
 	@FXML
@@ -123,7 +125,12 @@ public class LoginController implements Initializable
 				&& empPassField.getText().length()>1){
 			empId = empIdField.getText();
 			empPass = empPassField.getText();
-			boolean result = processEmployeeLogin();
+			boolean result = false;
+			try {
+				result = processEmployeeLogin();
+			}catch (NumberFormatException e){
+				result = false;
+			}
 			if(result){
 				noticeLabel.setText("Success!");
 			}else{
@@ -134,7 +141,7 @@ public class LoginController implements Initializable
 		}
 	}
 
-	private boolean processEmployeeLogin()
+	private boolean processEmployeeLogin() throws NumberFormatException
 	{
 		LoginValidator loginValidator = new LoginValidator(databaseHandler);
 		return loginValidator.validateLogin(Integer.parseInt(empId), empPass);
