@@ -8,9 +8,9 @@ module com.example.timecard {
 	requires activation;
 
 
-	opens com.example.timecard to javafx.fxml;
-	exports com.example.timecard;
-	exports com.example.timecard.Controllers;
-	exports com.example.timecard.Models.Database;
-	opens com.example.timecard.Controllers to javafx.fxml;
+	opens com.project.timecard to javafx.fxml;
+	exports com.project.timecard;
+	exports com.project.timecard.Controllers;
+	exports com.project.timecard.Models.Database;
+	opens com.project.timecard.Controllers to javafx.fxml;
 }
