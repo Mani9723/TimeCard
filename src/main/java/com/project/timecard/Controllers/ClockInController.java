@@ -62,7 +62,7 @@ public class ClockInController implements Initializable
 	@FXML
 	private Rectangle clockOutRect;
 
-	private boolean timeButtonsClicked;
+	private ActionEvent selectionEvent;
 
 	private static DatabaseHandler databaseHandler;
 
@@ -70,7 +70,6 @@ public class ClockInController implements Initializable
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
-		timeButtonsClicked = false;
 		setEmployeeIdInfoVisibility(false);
 		Clock.startClock(clockScreentimeLabel);
 	}
@@ -85,8 +84,8 @@ public class ClockInController implements Initializable
 	@FXML
 	public void onTimeButtonsClicked(ActionEvent event)
 	{
-		timeButtonsClicked = true;
 		setEmployeeIdInfoVisibility(true);
+		selectionEvent = event;
 
 		if(event.getSource().equals(clockInButton)){
 			setSelectionHighlight(clockInRect);
@@ -122,7 +121,34 @@ public class ClockInController implements Initializable
 	@FXML
 	void onClockInSubmitClicked(ActionEvent event)
 	{
+		String id;
+		if(event.getSource().equals(clockInSubmitButton)){
+			boolean result = validateIdInput();
+			if(result){
+				id = employeeIdField.getText();
+			}else{
+				// Notify user
+			}
+			if(selectionEvent.getSource().equals(clockInButton)){
 
+			}else if(selectionEvent.getSource().equals(clockOutButton)){
+
+			}else if(selectionEvent.getSource().equals(mealInButton)){
+
+			}else if(selectionEvent.getSource().equals(mealOutButton)){
+
+			}
+		}
+	}
+
+	private boolean validateIdInput()
+	{
+		try{
+			Long.parseLong(employeeIdField.getText());
+			return true;
+		}catch (NumberFormatException e){
+			return false;
+		}
 	}
 
 	@FXML
