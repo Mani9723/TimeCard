@@ -19,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ClockInController implements Initializable
@@ -141,20 +142,28 @@ public class ClockInController implements Initializable
 				id = employeeIdField.getText();
 
 				if (selectionEvent.getSource().equals(clockInButton)) {
-
+					informUser(id + ": Clocked In!");
 				} else if (selectionEvent.getSource().equals(clockOutButton)) {
-
+					informUser(id + ": Clocked Out!");
 				} else if (selectionEvent.getSource().equals(mealInButton)) {
-
+					informUser(id + ": Meal Clocked In!");
 				} else if (selectionEvent.getSource().equals(mealOutButton)) {
-
+					informUser(id + ": Meal Clocked out!");
 				}
+				employeeIdField.clear();
+				setEmployeeIdInfoVisibility(false);
+				removeSelectionHighlight(clockInRect,clockOutRect,mealInRect,mealOutRect);
 			}else{
 				dialogBoxHandler.OkButton("Invalid ID",new JFXDialog());
 				employeeIdField.clear();
 
 			}
 		}
+	}
+
+	private void informUser(String message)
+	{
+		dialogBoxHandler.OkButton(message,new JFXDialog());
 	}
 
 	private boolean validateIdInput()
