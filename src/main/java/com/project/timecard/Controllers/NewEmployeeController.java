@@ -1,5 +1,7 @@
 package com.project.timecard.Controllers;
 
+import com.jfoenix.controls.JFXDialog;
+import com.project.timecard.Controllers.ControllerUtil.DialogBoxHandler;
 import com.project.timecard.Controllers.ControllerUtil.SceneTransitioner;
 import com.project.timecard.Models.Database.DatabaseHandler;
 import com.project.timecard.Models.Objects.Employee;
@@ -12,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
 import java.net.URL;
@@ -20,6 +23,12 @@ import java.util.ResourceBundle;
 
 public class NewEmployeeController implements Initializable
 {
+	@FXML
+	private StackPane registerStackPane;
+
+	@FXML
+	private AnchorPane registerAnchorPane;
+
 	@FXML
 	private StackPane root;
 
@@ -44,12 +53,15 @@ public class NewEmployeeController implements Initializable
 	@FXML
 	private JFXButton confirmNewEmpButton;
 
+	private static DialogBoxHandler dialogBoxHandler;
 	private static DatabaseHandler databaseHandler;
 	private static SceneTransitioner sceneTransitioner;
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
+		dialogBoxHandler = new DialogBoxHandler(registerStackPane);
+		dialogBoxHandler.setNonStackPane(registerAnchorPane);
 		sceneTransitioner = new SceneTransitioner();
 		Clock.startClock(timeLabel);
 		root.requestFocus();
@@ -78,11 +90,15 @@ public class NewEmployeeController implements Initializable
 							databaseHandler.addNewEmployee(employee);
 							System.out.println(employee.getFirstName() + " " +
 									employee.getLastName() + " has been added.");
+							dialogBoxHandler.OkButton(employee.getFirstName() + " " +
+									employee.getLastName() + " has been added.",new JFXDialog());
 						} catch (SQLException e) {
-							e.printStackTrace();
+							dialogBoxHandler.OkButton("Error adding you to the system",new JFXDialog());
 						}
+						return;
+					}else{
+						dialogBoxHandler.OkButton("Please Fill out all of the fields", new JFXDialog());
 					}
-					return;
 				}
 			}
 		}

@@ -1,5 +1,8 @@
 package com.project.timecard.Controllers;
 
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.project.timecard.Controllers.ControllerUtil.DialogBoxHandler;
 import com.project.timecard.Controllers.ControllerUtil.SceneTransitioner;
 import com.project.timecard.Models.Database.DatabaseHandler;
 import com.project.timecard.Utils.Clock;
@@ -9,14 +12,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ClockInController implements Initializable
 {
+	@FXML
+	private StackPane clockInStackPane;
+
+	@FXML
+	private AnchorPane clockInAnchorPane;
+
 	@FXML
 	private JFXButton clockInExitButton;
 
@@ -37,9 +49,6 @@ public class ClockInController implements Initializable
 
 	@FXML
 	private TextField employeeIdField;
-
-	@FXML
-	private Label clockSubmitLabel;
 
 	@FXML
 	private JFXButton clockInSubmitButton;
@@ -66,12 +75,16 @@ public class ClockInController implements Initializable
 
 	private static DatabaseHandler databaseHandler;
 
+	private static DialogBoxHandler dialogBoxHandler;
+
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
 		setEmployeeIdInfoVisibility(false);
 		Clock.startClock(clockScreentimeLabel);
+		dialogBoxHandler = new DialogBoxHandler(clockInStackPane);
+		dialogBoxHandler.setNonStackPane(clockInAnchorPane);
 	}
 
 	public void init(DatabaseHandler database)
@@ -124,18 +137,21 @@ public class ClockInController implements Initializable
 		String id;
 		if(event.getSource().equals(clockInSubmitButton)){
 			boolean result = validateIdInput();
-			if(result){
+			if(result && databaseHandler.usernameExists(employeeIdField.getText())) {
 				id = employeeIdField.getText();
+
+				if (selectionEvent.getSource().equals(clockInButton)) {
+
+				} else if (selectionEvent.getSource().equals(clockOutButton)) {
+
+				} else if (selectionEvent.getSource().equals(mealInButton)) {
+
+				} else if (selectionEvent.getSource().equals(mealOutButton)) {
+
+				}
 			}else{
-				// Notify user
-			}
-			if(selectionEvent.getSource().equals(clockInButton)){
-
-			}else if(selectionEvent.getSource().equals(clockOutButton)){
-
-			}else if(selectionEvent.getSource().equals(mealInButton)){
-
-			}else if(selectionEvent.getSource().equals(mealOutButton)){
+				dialogBoxHandler.OkButton("Invalid ID",new JFXDialog());
+				employeeIdField.clear();
 
 			}
 		}
@@ -170,7 +186,6 @@ public class ClockInController implements Initializable
 	{
 		employeeIdField.setVisible(visibility);
 		clockInSubmitButton.setVisible(visibility);
-		clockSubmitLabel.setVisible(visibility);
 		submitRect.setVisible(visibility);
 	}
 

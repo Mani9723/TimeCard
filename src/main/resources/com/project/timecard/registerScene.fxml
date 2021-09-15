@@ -16,9 +16,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timecard.Controllers.NewEmployeeController">
+<StackPane fx:id="registerStackPane" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timecard.Controllers.NewEmployeeController">
    <children>
-      <AnchorPane prefHeight="500.0" prefWidth="600.0">
+      <AnchorPane fx:id="registerAnchorPane" prefHeight="500.0" prefWidth="600.0">
          <children>
             <ImageView fitHeight="500.0" fitWidth="600.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>

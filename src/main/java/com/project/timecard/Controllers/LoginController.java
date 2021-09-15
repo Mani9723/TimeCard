@@ -1,5 +1,7 @@
 package com.project.timecard.Controllers;
 
+import com.jfoenix.controls.JFXDialog;
+import com.project.timecard.Controllers.ControllerUtil.DialogBoxHandler;
 import com.project.timecard.Controllers.ControllerUtil.SceneTransitioner;
 import com.project.timecard.Models.Database.DatabaseHandler;
 import com.project.timecard.Utils.Clock;
@@ -13,7 +15,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,6 +28,13 @@ import java.util.ResourceBundle;
  */
 public class LoginController implements Initializable
 {
+
+	@FXML
+	private StackPane loginStackPane;
+
+	@FXML
+	private AnchorPane loginAnchorPane;
+
 	@FXML
 	private GridPane gridPane;
 
@@ -53,6 +64,7 @@ public class LoginController implements Initializable
 
 	private static DatabaseHandler databaseHandler;
 	private static SceneTransitioner sceneTransitioner;
+	private static DialogBoxHandler dialogBoxHandler;
 	private String empId;
 	private String empPass;
 
@@ -60,6 +72,8 @@ public class LoginController implements Initializable
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
+		dialogBoxHandler = new DialogBoxHandler(loginStackPane);
+		dialogBoxHandler.setNonStackPane(loginAnchorPane);
 		exitButton.requestFocus();
 		Clock.startClock(timeLabel);
 		sceneTransitioner = new SceneTransitioner();
@@ -126,12 +140,12 @@ public class LoginController implements Initializable
 				result = false;
 			}
 			if(result){
-				noticeLabel.setText("Success!");
+				dialogBoxHandler.OkButton("Success!", new JFXDialog());
 			}else{
-				noticeLabel.setText("Invalid Logon");
+				dialogBoxHandler.OkButton("Invalid Logon", new JFXDialog());
 			}
 		}else{
-			noticeLabel.setText("Please Fill out both fields!");
+			dialogBoxHandler.OkButton("Please Fill out both fields!", new JFXDialog());
 		}
 	}
 
