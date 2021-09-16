@@ -72,8 +72,7 @@ public class LoginController implements Initializable
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
-		dialogBoxHandler = new DialogBoxHandler(loginStackPane);
-		dialogBoxHandler.setNonStackPane(loginAnchorPane);
+		dialogBoxHandler = new DialogBoxHandler(loginStackPane, loginAnchorPane);
 		exitButton.requestFocus();
 		Clock.startClock(timeLabel);
 		sceneTransitioner = new SceneTransitioner();

@@ -60,8 +60,7 @@ public class NewEmployeeController implements Initializable
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
-		dialogBoxHandler = new DialogBoxHandler(registerStackPane);
-		dialogBoxHandler.setNonStackPane(registerAnchorPane);
+		dialogBoxHandler = new DialogBoxHandler(registerStackPane, registerAnchorPane);
 		sceneTransitioner = new SceneTransitioner();
 		Clock.startClock(timeLabel);
 		root.requestFocus();

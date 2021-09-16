@@ -84,8 +84,7 @@ public class ClockInController implements Initializable
 	{
 		setEmployeeIdInfoVisibility(false);
 		Clock.startClock(clockScreentimeLabel);
-		dialogBoxHandler = new DialogBoxHandler(clockInStackPane);
-		dialogBoxHandler.setNonStackPane(clockInAnchorPane);
+		dialogBoxHandler = new DialogBoxHandler(clockInStackPane, clockInAnchorPane);
 	}
 
 	public void init(DatabaseHandler database)

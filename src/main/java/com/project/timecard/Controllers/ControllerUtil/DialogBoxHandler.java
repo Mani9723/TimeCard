@@ -25,9 +25,10 @@ public class DialogBoxHandler
 	private Parent parent;
 	private GaussianBlur gaussianBlur;
 
-	public DialogBoxHandler(StackPane stackPane)
+	public DialogBoxHandler(StackPane stackPane, Parent root)
 	{
 		this.stackPane = stackPane;
+		this.parent = root;
 		gaussianBlur = new GaussianBlur();
 		gaussianBlur.setRadius(7.5);
 	}
@@ -72,9 +73,9 @@ public class DialogBoxHandler
 		parent.setEffect(gaussianBlur);
 	}
 
-	public void setNonStackPane(Parent root)
-	{
-		parent = root;
-	}
+//	public void setNonStackPane(Parent root)
+//	{
+//		parent = root;
+//	}
 
 }
