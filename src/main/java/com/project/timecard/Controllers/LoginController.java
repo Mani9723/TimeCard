@@ -139,13 +139,18 @@ public class LoginController implements Initializable
 				result = false;
 			}
 			if(result){
-				dialogBoxHandler.OkButton("Success!", new JFXDialog());
+				informUser("Success!");
 			}else{
-				dialogBoxHandler.OkButton("Invalid Logon", new JFXDialog());
+				informUser("Invalid Logon");
 			}
 		}else{
-			dialogBoxHandler.OkButton("Please Fill out both fields!", new JFXDialog());
+			informUser("Please Fill out both fields!");
 		}
+	}
+
+	private void informUser(String message)
+	{
+		dialogBoxHandler.OkButton(message, new JFXDialog());
 	}
 
 	private boolean processEmployeeLogin() throws NumberFormatException

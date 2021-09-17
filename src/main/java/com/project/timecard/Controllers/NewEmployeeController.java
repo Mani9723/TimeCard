@@ -89,19 +89,24 @@ public class NewEmployeeController implements Initializable
 							databaseHandler.addNewEmployee(employee);
 							System.out.println(employee.getFirstName() + " " +
 									employee.getLastName() + " has been added.");
-							dialogBoxHandler.OkButton(employee.getFirstName() + " " +
-									employee.getLastName() + " has been added.",new JFXDialog());
+							informUser(employee.getFirstName() + " " +
+									employee.getLastName() + " has been added.");
 						} catch (SQLException e) {
-							dialogBoxHandler.OkButton("Error adding you to the system",new JFXDialog());
+							informUser("Error adding you to the system");
 						}
 						return;
 					}else{
-						dialogBoxHandler.OkButton("Please Fill out all of the fields", new JFXDialog());
+						informUser("Please Fill out all of the fields");
 					}
 				}
 			}
 		}
 
+	}
+
+	private void informUser(String message)
+	{
+		dialogBoxHandler.OkButton(message,new JFXDialog());
 	}
 
 	private boolean fieldsFilled()

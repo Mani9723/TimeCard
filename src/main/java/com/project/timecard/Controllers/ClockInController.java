@@ -153,7 +153,7 @@ public class ClockInController implements Initializable
 				setEmployeeIdInfoVisibility(false);
 				removeSelectionHighlight(clockInRect,clockOutRect,mealInRect,mealOutRect);
 			}else{
-				dialogBoxHandler.OkButton("Invalid ID",new JFXDialog());
+				informUser("Invalid ID");
 				employeeIdField.clear();
 
 			}
