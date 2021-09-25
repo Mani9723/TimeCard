@@ -14,7 +14,7 @@ Time Card management system
 
 ![Main Screen 2](https://github.com/Mani9723/TimeCard/blob/master/src/main/resources/com/project/timecard/Images/HomeScreen2.jpg?raw=true)
 
-![Login Screen](https://github.com/Mani9723/TimeCard/blob/master/src/main/resources/com/project/timecard/Images/LoginScreen1.jpg?raw=true)
+![Login Screen](https://github.com/Mani9723/TimeCard/blob/master/src/main/resources/com/project/timecard/Images/LoginScreen.jpg?raw=true)
 
 ![Register Screen](https://github.com/Mani9723/TimeCard/blob/master/src/main/resources/com/project/timecard/Images/Register1.jpg?raw=true)
 
