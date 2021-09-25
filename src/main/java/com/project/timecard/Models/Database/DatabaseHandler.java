@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @SuppressWarnings("SqlResolve")
 public class DatabaseHandler
@@ -195,13 +196,12 @@ public class DatabaseHandler
 		}
 	}
 
-	@SuppressWarnings("Unused")
-	public boolean updateShift(Shift shift)
+	public boolean updateShift(String empId, Shift shift)
 	{
 		PreparedStatement preparedStatement = null;
-		String query = "UPDATE employee_" + shift.getEmployee().getEmpId()
+		String query = "UPDATE employee_" + empId
 				+ " set shiftEnd = ?, mealBegin = ?, " +
-				"mealEnd = ? where date = ?";
+				"mealEnd = ? where work_date = ?";
 
 		try{
 			preparedStatement = connection.prepareStatement(query);
@@ -213,7 +213,7 @@ public class DatabaseHandler
 			}
 			if(shift.getTimeCard().getMealBreakBegin() != null) {
 				preparedStatement.setString(2, shift.getTimeCard()
-						.getMealBreakEnd().toString());
+						.getMealBreakBegin().toString());
 			}else{
 				preparedStatement.setString(2, null);
 			}
@@ -225,6 +225,7 @@ public class DatabaseHandler
 			}
 			preparedStatement.setString(4,shift.getDate().toString());
 			preparedStatement.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -235,37 +236,6 @@ public class DatabaseHandler
 				e.printStackTrace();
 			}
 		}
-
-		return false;
-	}
-
-	public boolean updateClockOut(String empId, TimeCard timeCard)
-	{
-		PreparedStatement preparedStatement = null;
-		String query = "UPDATE employee_" + empId
-				+ " SET shiftEnd = ? WHERE work_date = ?";
-		try{
-			preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1,timeCard.getShiftEnd().toString());
-			preparedStatement.setString(2,LocalDate.now().toString());
-			preparedStatement.executeUpdate();
-			return true;
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
-
-		return false;
-	}
-
-	public boolean updateMealBegin(String empId, TimeCard timeCard)
-	{
-
-		return false;
-	}
-
-	public boolean updateMealEnd(String empId, TimeCard timeCard)
-	{
-
 		return false;
 	}
 
@@ -288,7 +258,7 @@ public class DatabaseHandler
 			e.printStackTrace();
 		}
 		finally {
-			assert preparedStatement != null;
+			assert preparedStatement != null ;
 			try {
 				preparedStatement.close();
 			} catch (SQLException e) {
@@ -300,6 +270,51 @@ public class DatabaseHandler
 		return true;
 	}
 
+	public Shift getShift(String empId)
+	{
+		Shift shift = null;
+
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String query = "SELECT * from employee_"+ empId +" WHERE work_date = ?";
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,LocalDate.now().toString());
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				shift = new Shift();
+				TimeCard timeCard = new TimeCard();
+				if(resultSet.getString("shiftBegin") != null){
+					timeCard.clockIn(LocalTime.parse(resultSet.getString("ShiftBegin")));
+				}if(resultSet.getString("shiftEnd") != null){
+					timeCard.clockOut(LocalTime.parse(resultSet.getString("ShiftEnd")));
+				}if(resultSet.getString("mealBegin") != null){
+					timeCard.clockMealBreakBegin(LocalTime.parse(resultSet.getString("mealBegin")));
+				}if(resultSet.getString("mealEnd") != null){
+					timeCard.clockMealBreakEnd(LocalTime.parse(resultSet.getString("mealEnd")));
+				}
+				shift.setDate(LocalDate.parse(resultSet.getString("work_date")));
+				shift.setTimeCard(timeCard);
+				return shift;
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if (preparedStatement != null && resultSet != null) {
+				try {
+					preparedStatement.close();
+					resultSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return shift;
+	}
+
+	@SuppressWarnings("unused")
 	public boolean shiftExists(String empId)
 	{
 		PreparedStatement preparedStatement = null;
@@ -383,11 +398,6 @@ public class DatabaseHandler
 			assert preparedStatement != null;
 			try {
 				preparedStatement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			assert resultSet != null;
-			try {
 				resultSet.close();
 			} catch (SQLException e) {
 				e.printStackTrace();

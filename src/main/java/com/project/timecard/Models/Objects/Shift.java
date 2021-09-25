@@ -40,7 +40,7 @@ public class Shift
 		LocalTime tempShiftDuration = calculateTimeDifference(timeCard.getShiftBegin()
 				,timeCard.getShiftEnd());
 
-		if(timeCard.tookMealBreak()){
+		if(timeCard.isMealBreakFinished()){
 			mealDuration = calculateTimeDifference(timeCard.getMealBreakBegin()
 					,timeCard.getMealBreakEnd());
 			setShiftDuration(calculateTimeDifference(tempShiftDuration,mealDuration));
@@ -89,7 +89,6 @@ public class Shift
 	{
 		this.employee = employee;
 	}
-
 
 
 	public Employee getEmployee()

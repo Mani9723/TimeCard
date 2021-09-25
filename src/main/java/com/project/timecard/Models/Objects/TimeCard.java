@@ -8,7 +8,8 @@ public class TimeCard
 	private LocalTime shiftEnd;
 	private LocalTime mealBreakBegin;
 	private LocalTime mealBreakEnd;
-	private boolean tookMealBreak;
+	private boolean isMealBreakStarted;
+	private boolean isMealBreakFinished;
 
 	public TimeCard()
 	{
@@ -16,7 +17,8 @@ public class TimeCard
 		this.shiftEnd = null;
 		this.mealBreakBegin = null;
 		this.mealBreakEnd = null;
-		this.tookMealBreak = false;
+		this.isMealBreakStarted = false;
+		this.isMealBreakFinished = false;
 	}
 
 	public void clockIn(LocalTime shiftBegin)
@@ -31,12 +33,13 @@ public class TimeCard
 
 	public void clockMealBreakBegin(LocalTime mealBreakBegin)
 	{
-		this.tookMealBreak = true;
+		this.isMealBreakStarted = true;
 		this.mealBreakBegin = mealBreakBegin;
 	}
 
 	public void clockMealBreakEnd(LocalTime mealBreakEnd)
 	{
+		this.isMealBreakFinished = true;
 		this.mealBreakEnd = mealBreakEnd;
 	}
 
@@ -60,11 +63,15 @@ public class TimeCard
 		return mealBreakEnd;
 	}
 
-	public boolean tookMealBreak()
+	public boolean isMealBreakStarted()
 	{
-		return tookMealBreak;
+		return isMealBreakStarted;
 	}
 
+	public boolean isMealBreakFinished()
+	{
+		return isMealBreakFinished;
+	}
 
 	@Override
 	public String toString()
@@ -74,7 +81,8 @@ public class TimeCard
 				", shiftEnd='" + shiftEnd + '\'' +
 				", mealBreakBegin='" + mealBreakBegin + '\'' +
 				", mealBreakEnd='" + mealBreakEnd + '\'' +
-				", tookMealBreak='" + tookMealBreak + '\'' +
+				", isMealStarted='" + isMealBreakStarted + '\'' +
+				", isMealEnded='" + isMealBreakFinished + '\'' +
 				'}';
 	}
 }

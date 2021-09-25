@@ -46,3 +46,17 @@ else:
 
         if meal out selected:
             add it to db
+
+
+Reqs for clock out:
+        Must be clocked in
+        if meal then mealIn and mealOut
+Reqs for Meal In:
+        Must be clocked In
+        Must not be clocked out/ meal out
+Reqs for Meal Out:
+        Must be clocked In
+        Must be meal In
+        must not be clocked out
+
+

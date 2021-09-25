@@ -142,44 +142,32 @@ public class ClockInController implements Initializable
 	{
 		TimeCard timeCard = new TimeCard();
 		Employee employee;
-		boolean shift;
+		Shift shift;
 		String id;
 		if(event.getSource().equals(clockInSubmitButton)){
 			boolean result = validateIdInput();
 			if(result && databaseHandler.usernameExists(employeeIdField.getText())) {
 				id = employeeIdField.getText();
 				employee = databaseHandler.getEmployee(id);
-				shift = databaseHandler.shiftExists(id);
+				shift = databaseHandler.getShift(id);
 
-				if (selectionEvent.getSource().equals(clockInButton)) {
-					if(!shift) {
-						updateEmpClockIn(employee,timeCard);
-					}
-				}
-				else if (selectionEvent.getSource().equals(clockOutButton)) {
-					if(!shift){
+				if(shift == null) {
+					if (!selectionEvent.getSource().equals(clockInButton)) {
 						informUser("Please Clock In First");
-					}else {
-						timeCard.clockOut(LocalTime.now());
-						databaseHandler.updateClockOut(id,timeCard);
-						informUser(id + ": Clocked Out!");
+					}else if(selectionEvent.getSource().equals(clockInButton)){
+						updateEmpClockIn(employee, timeCard);
 					}
-				}// Below two functions not available yet
-				else if (selectionEvent.getSource().equals(mealInButton)) {
-					if(!shift){
-						informUser("Please Clock In First");
-					}else {
-						timeCard.clockMealBreakBegin(LocalTime.now());
-						informUser(id + ": Meal Clocked In!");
+				} else if(!selectionEvent.getSource().equals(clockInButton)){
+					shift.setEmployee(employee);
+					if (selectionEvent.getSource().equals(clockOutButton)) {
+						handleClockOut(id,shift);
+					} else if (selectionEvent.getSource().equals(mealInButton)) {
+						handleMealBegin(id,shift);
+					} else if (selectionEvent.getSource().equals(mealOutButton)) {
+						handleMealEnd(id,shift);
 					}
-				}
-				else if (selectionEvent.getSource().equals(mealOutButton)) {
-					if(!shift){
-						informUser("Please Clock In First");
-					}else {
-						timeCard.clockMealBreakEnd(LocalTime.now());
-						informUser(id + ": Meal Clocked out!");
-					}
+				}else{
+					informUser("Already Clocked In");
 				}
 				employeeIdField.clear();
 				setEmployeeIdInfoVisibility(false);
@@ -189,6 +177,53 @@ public class ClockInController implements Initializable
 				employeeIdField.clear();
 
 			}
+		}
+	}
+
+	private void handleClockOut(String id, Shift shift)
+	{
+		if(shift.getTimeCard().isMealBreakStarted() && !shift.getTimeCard().isMealBreakFinished()){
+			informUser("Please end meal break first");
+		}else if(!shift.getTimeCard().isMealBreakStarted()
+				|| (shift.getTimeCard().isMealBreakStarted() && shift.getTimeCard().isMealBreakFinished())){
+			shift.getTimeCard().clockOut(LocalTime.now());
+			if (databaseHandler.updateShift(id, shift)) {
+				informUser(id + ": Clocked Out!");
+			} else {
+				informUser(id + ": Error Clocking Out");
+			}
+		}
+	}
+
+	private void handleMealBegin(String id, Shift shift)
+	{
+		if(shift.getTimeCard().getShiftEnd() != null) {
+			informUser("Employee already clocked out");
+		}else if(shift.getTimeCard().isMealBreakStarted() || shift.getTimeCard().isMealBreakFinished()){
+			informUser("Meal Break already accounted for");
+		}
+		else {
+			shift.getTimeCard().clockMealBreakBegin(LocalTime.now());
+			if (databaseHandler.updateShift(id, shift)) {
+				informUser(id + ": Meal Clocked In!");
+			} else {
+				informUser(id + ": Error Clocking In");
+			}
+		}
+	}
+
+	private void handleMealEnd(String id, Shift shift)
+	{
+		if(shift.getTimeCard().isMealBreakStarted() && !shift.getTimeCard().isMealBreakFinished()
+				&& shift.getTimeCard().getShiftEnd() == null) {
+			shift.getTimeCard().clockMealBreakEnd(LocalTime.now());
+			if (databaseHandler.updateShift(id, shift)) {
+				informUser(id + ": Meal Clocked Out!");
+			} else {
+				informUser(id + ": Error Clocking Out");
+			}
+		}else{
+			informUser(id + ": Error");
 		}
 	}
 
