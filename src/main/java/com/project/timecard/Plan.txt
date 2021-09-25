@@ -25,3 +25,24 @@ EMPS_TABLE:
 Each Employees Table:
     Columns: shiftBegin, shiftEnd, mealBegin, mealEnd, hours, overtimeHours, grossPay,
              overtimePay, ytdHours, ytdOvertimeHours, ytdOvertimePay, ytdGross
+
+
+                                ClockIns/outs logic
+
+First get the employee
+Then get the current day shift record if available
+if not available:
+    New shift
+    Make sure the user selected clock in and not the other options
+    add the clock in time to the new shift
+    add shift to the database
+else:
+    // we here so it means employee already clocked in
+    make sure employee selected the options other than clock in
+    if employee wants to take meal break:
+        make sure meal out is not selected
+        add meal in to the shift
+        add shift to database
+
+        if meal out selected:
+            add it to db

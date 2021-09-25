@@ -12,6 +12,10 @@ public class TimeCard
 
 	public TimeCard()
 	{
+		this.shiftBegin = null;
+		this.shiftEnd = null;
+		this.mealBreakBegin = null;
+		this.mealBreakEnd = null;
 		this.tookMealBreak = false;
 	}
 

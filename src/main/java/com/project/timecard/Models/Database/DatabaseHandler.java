@@ -5,6 +5,7 @@ import com.project.timecard.Models.Constants.EmpTableColumns;
 import com.project.timecard.Models.Constants.MainTableColumns;
 import com.project.timecard.Models.Objects.Employee;
 import com.project.timecard.Models.Objects.Shift;
+import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.EncryptPassword;
 
 import java.sql.Connection;
@@ -12,7 +13,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
+@SuppressWarnings("SqlResolve")
 public class DatabaseHandler
 {
 
@@ -79,9 +82,10 @@ public class DatabaseHandler
 				+                    "id INTEGER PRIMARY KEY NOT NULL UNIQUE,\n"
 				+ MainTableColumns.firstName + " text NOT NULL,\n"
 				+ MainTableColumns.lastName  + " text NOT NULL,\n"
-				+ MainTableColumns.empId     +" text NOT NULL,\n"
-				+ MainTableColumns.empPass   +" text,\n"
-				+ MainTableColumns.empStatus +" text\n"
+				+ MainTableColumns.empId     +"  text NOT NULL,\n"
+				+ MainTableColumns.empPass   +"  text,\n"
+				+ MainTableColumns.empPay       +"  text\n"
+				+ MainTableColumns.empStatus +"  text\n"
 				+ ")";
 		createPrepStmtExecute(query);
 		System.out.println("Main Table created");
@@ -97,14 +101,14 @@ public class DatabaseHandler
 	public void createNewEmployeeShiftTable(String user) throws SQLException
 	{
 		String query = "CREATE TABLE IF NOT EXISTS employee_"+user+ " (\n"
-				+                    "id INTEGER PRIMARY KEY NOT NULL UNIQUE,\n"
-				+ EmpTableColumns.shiftBegin.name() +" text NOT NULL,\n"
-				+ EmpTableColumns.shiftEnd.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.work_date.name() +" text PRIMARY KEY NOT NULL UNIQUE,\n"
+				+ EmpTableColumns.shiftBegin.name() +" text,\n"
+				+ EmpTableColumns.shiftEnd.name() +" text,\n"
 				+ EmpTableColumns.mealBegin.name() +" text,\n"
 				+ EmpTableColumns.mealEnd.name() +" text ,\n"
-				+ EmpTableColumns.hours.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.hours.name() +" text,\n"
 				+ EmpTableColumns.overtimeHours.name() +" text ,\n"
-				+ EmpTableColumns.grossPay.name() +" text NOT NULL,\n"
+				+ EmpTableColumns.grossPay.name() +" text,\n"
 				+ EmpTableColumns.overtimePay.name() +" text \n"
 				+ EmpTableColumns.ytdHours +" text \n"
 				+ EmpTableColumns.ytdOvertimeHours.name() +" text \n"
@@ -168,8 +172,8 @@ public class DatabaseHandler
 	{
 		PreparedStatement preparedStatement = null;
 
-		String query = "INSERT into EMPS_TABLE(firstName, lastName,empId,empPass,empStatus)" +
-				"VALUES(?,?,?,?,?)";
+		String query = "INSERT into EMPS_TABLE(firstName, lastName,empId,empPass,empStatus,empPay)" +
+				"VALUES(?,?,?,?,?,?)";
 
 		try{
 			preparedStatement = connection.prepareStatement(query);
@@ -178,7 +182,10 @@ public class DatabaseHandler
 			preparedStatement.setString(3, Long.toString(employee.getEmpId()));
 			preparedStatement.setString(4, employee.getEmpPass());
 			preparedStatement.setString(5, "Employed");
+			preparedStatement.setString(6, "12.0");
+			System.out.println("Adding new employee");
 			preparedStatement.executeUpdate();
+			System.out.println("Employee Added\nCreating Employee Shift table");
 			createNewEmployeeShiftTable(Long.toString(employee.getEmpId()));
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -188,26 +195,172 @@ public class DatabaseHandler
 		}
 	}
 
-	public boolean addShift(Shift shift) throws SQLException
+	@SuppressWarnings("Unused")
+	public boolean updateShift(Shift shift)
 	{
 		PreparedStatement preparedStatement = null;
-		String query = "INSERT INTO employee_" + shift.getEmployee().getEmpId() + "(shiftBegin, shiftEnd, hours,grossPay) " +
-				"VALUES(?,?,?,?)";
+		String query = "UPDATE employee_" + shift.getEmployee().getEmpId()
+				+ " set shiftEnd = ?, mealBegin = ?, " +
+				"mealEnd = ? where date = ?";
 
 		try{
 			preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1,shift.getTimeCard().getShiftBegin().toString());
-			preparedStatement.setString(2,shift.getTimeCard().getShiftEnd().toString());
-			preparedStatement.setString(3,shift.getShiftDuration().toString());
-			preparedStatement.setString(4,Double.toString(shift.getGrossPay()));
-			preparedStatement.execute();
+			if(shift.getTimeCard().getShiftEnd() != null) {
+				preparedStatement.setString(1, shift.getTimeCard()
+						.getShiftEnd().toString());
+			}else{
+				preparedStatement.setString(1, null);
+			}
+			if(shift.getTimeCard().getMealBreakBegin() != null) {
+				preparedStatement.setString(2, shift.getTimeCard()
+						.getMealBreakEnd().toString());
+			}else{
+				preparedStatement.setString(2, null);
+			}
+			if(shift.getTimeCard().getMealBreakEnd() != null){
+				preparedStatement.setString(3, shift.getTimeCard()
+						.getMealBreakEnd().toString());
+			}else {
+				preparedStatement.setString(3, null);
+			}
+			preparedStatement.setString(4,shift.getDate().toString());
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
 			assert preparedStatement != null;
-			preparedStatement.close();
+			try {
+				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
+	public boolean updateClockOut(String empId, TimeCard timeCard)
+	{
+		PreparedStatement preparedStatement = null;
+		String query = "UPDATE employee_" + empId
+				+ " SET shiftEnd = ? WHERE work_date = ?";
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,timeCard.getShiftEnd().toString());
+			preparedStatement.setString(2,LocalDate.now().toString());
+			preparedStatement.executeUpdate();
+			return true;
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public boolean updateMealBegin(String empId, TimeCard timeCard)
+	{
+
+		return false;
+	}
+
+	public boolean updateMealEnd(String empId, TimeCard timeCard)
+	{
+
+		return false;
+	}
+
+	public boolean addNewShift(Shift shift)
+	{
+		PreparedStatement preparedStatement = null;
+		String query = "INSERT INTO employee_" + shift.getEmployee().getEmpId() + "(work_date, shiftBegin) " +
+				"VALUES(?,?)";
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,shift.getDate().toString());
+			if(shift.getTimeCard().getShiftBegin() != null) {
+				preparedStatement.setString(2, shift.getTimeCard()
+						.getShiftBegin().toString());
+			}else{
+				preparedStatement.setString(1, null);
+			}
+			preparedStatement.execute();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		finally {
+			assert preparedStatement != null;
+			try {
+				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		System.out.println(query);
 		return true;
+	}
+
+	public boolean shiftExists(String empId)
+	{
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String query = "SELECT * from employee_"+ empId +" WHERE work_date = ?";
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,LocalDate.now().toString());
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				if(resultSet.getString(EmpTableColumns.shiftBegin.name()) != null){
+					return true;
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if (preparedStatement != null && resultSet != null) {
+				try {
+					preparedStatement.close();
+					resultSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public Employee getEmployee(String user)
+	{
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		Employee employee = null;
+		String query = "SELECT * FROM " + DatabaseFiles.EMPS_TABLE.name()
+				+ " where empID = ?";
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,user);
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				long empId = Long.parseLong(resultSet
+						.getString(MainTableColumns.empId.name()));
+				double pay = Double.parseDouble(resultSet
+						.getString(MainTableColumns.empPay.name()));
+				employee = new Employee(
+						resultSet.getString(MainTableColumns.firstName.name()),
+						MainTableColumns.lastName.name(),
+						empId,
+						pay);
+			}
+
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+
+		return employee;
+
 	}
 
 	public boolean usernameExists(String user)
@@ -242,7 +395,6 @@ public class DatabaseHandler
 		}
 		return false;
 	}
-
 
 
 }

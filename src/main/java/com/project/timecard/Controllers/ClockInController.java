@@ -5,6 +5,9 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.project.timecard.Controllers.ControllerUtil.DialogBoxHandler;
 import com.project.timecard.Controllers.ControllerUtil.SceneTransitioner;
 import com.project.timecard.Models.Database.DatabaseHandler;
+import com.project.timecard.Models.Objects.Employee;
+import com.project.timecard.Models.Objects.Shift;
+import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.Clock;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
@@ -19,6 +22,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -131,23 +136,50 @@ public class ClockInController implements Initializable
 		}
 	}
 
+	// TODO: Make sure to handle null values from the shift class when adding to the database.
 	@FXML
 	void onClockInSubmitClicked(ActionEvent event)
 	{
+		TimeCard timeCard = new TimeCard();
+		Employee employee;
+		boolean shift;
 		String id;
 		if(event.getSource().equals(clockInSubmitButton)){
 			boolean result = validateIdInput();
 			if(result && databaseHandler.usernameExists(employeeIdField.getText())) {
 				id = employeeIdField.getText();
+				employee = databaseHandler.getEmployee(id);
+				shift = databaseHandler.shiftExists(id);
 
 				if (selectionEvent.getSource().equals(clockInButton)) {
-					informUser(id + ": Clocked In!");
-				} else if (selectionEvent.getSource().equals(clockOutButton)) {
-					informUser(id + ": Clocked Out!");
-				} else if (selectionEvent.getSource().equals(mealInButton)) {
-					informUser(id + ": Meal Clocked In!");
-				} else if (selectionEvent.getSource().equals(mealOutButton)) {
-					informUser(id + ": Meal Clocked out!");
+					if(!shift) {
+						updateEmpClockIn(employee,timeCard);
+					}
+				}
+				else if (selectionEvent.getSource().equals(clockOutButton)) {
+					if(!shift){
+						informUser("Please Clock In First");
+					}else {
+						timeCard.clockOut(LocalTime.now());
+						databaseHandler.updateClockOut(id,timeCard);
+						informUser(id + ": Clocked Out!");
+					}
+				}// Below two functions not available yet
+				else if (selectionEvent.getSource().equals(mealInButton)) {
+					if(!shift){
+						informUser("Please Clock In First");
+					}else {
+						timeCard.clockMealBreakBegin(LocalTime.now());
+						informUser(id + ": Meal Clocked In!");
+					}
+				}
+				else if (selectionEvent.getSource().equals(mealOutButton)) {
+					if(!shift){
+						informUser("Please Clock In First");
+					}else {
+						timeCard.clockMealBreakEnd(LocalTime.now());
+						informUser(id + ": Meal Clocked out!");
+					}
 				}
 				employeeIdField.clear();
 				setEmployeeIdInfoVisibility(false);
@@ -157,6 +189,20 @@ public class ClockInController implements Initializable
 				employeeIdField.clear();
 
 			}
+		}
+	}
+
+	private void updateEmpClockIn(Employee employee, TimeCard timeCard)
+	{
+		Shift shift = new Shift();
+		timeCard.clockIn(LocalTime.now());
+		shift.setDate(LocalDate.now());
+		shift.setEmployee(employee);
+		shift.setTimeCard(timeCard);
+		if(databaseHandler.addNewShift(shift)) {
+			informUser(employee.getFirstName() + ": Clocked In!");
+		}else{
+			informUser(employee.getFirstName() +": Error Clocking in");
 		}
 	}
 

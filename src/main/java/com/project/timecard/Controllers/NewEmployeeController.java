@@ -24,13 +24,13 @@ import java.util.ResourceBundle;
 public class NewEmployeeController implements Initializable
 {
 	@FXML
+	public JFXButton loginReturnButton;
+
+	@FXML
 	private StackPane registerStackPane;
 
 	@FXML
 	private AnchorPane registerAnchorPane;
-
-	@FXML
-	private StackPane root;
 
 	@FXML
 	private Label timeLabel;
@@ -63,7 +63,6 @@ public class NewEmployeeController implements Initializable
 		dialogBoxHandler = new DialogBoxHandler(registerStackPane, registerAnchorPane);
 		sceneTransitioner = new SceneTransitioner();
 		Clock.startClock(timeLabel);
-		root.requestFocus();
 	}
 
 	public void init(DatabaseHandler database)
@@ -87,8 +86,6 @@ public class NewEmployeeController implements Initializable
 						employee.setEmpId(ids[i]);
 						try {
 							databaseHandler.addNewEmployee(employee);
-							System.out.println(employee.getFirstName() + " " +
-									employee.getLastName() + " has been added.");
 							informUser(employee.getFirstName() + " " +
 									employee.getLastName() + " has been added.");
 						} catch (SQLException e) {

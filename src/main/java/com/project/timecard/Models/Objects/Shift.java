@@ -6,13 +6,24 @@ import java.time.LocalTime;
 
 public class Shift
 {
-	private final LocalDate date;
-	private final TimeCard timeCard;
-	private final Employee employee;
+	private LocalDate date;
+	private TimeCard timeCard;
+	private Employee employee;
 	private LocalTime shiftDuration;
 	private LocalTime mealDuration;
 	private double grossPay;
 	private double totalHours;
+
+	public Shift()
+	{
+		this.date = null;
+		this.timeCard = null;
+		this.employee = null;
+		this.shiftDuration = null;
+		this.mealDuration = null;
+		this.grossPay = 0.0;
+		this.totalHours = 0.0;
+	}
 
 	public Shift(LocalDate date, TimeCard timeCard, Employee employee)
 	{
@@ -20,10 +31,11 @@ public class Shift
 		this.timeCard = timeCard;
 		this.employee = employee;
 		totalHours = 0.0;
-		calculateShiftData();
+		this.grossPay = 0.0;
 	}
 
-	private void calculateShiftData()
+
+	public void calculateShiftData()
 	{
 		LocalTime tempShiftDuration = calculateTimeDifference(timeCard.getShiftBegin()
 				,timeCard.getShiftEnd());
@@ -62,6 +74,23 @@ public class Shift
 
 		return LocalTime.of(hours,min);
 	}
+
+	public void setDate(LocalDate date)
+	{
+		this.date = date;
+	}
+
+	public void setTimeCard(TimeCard timeCard)
+	{
+		this.timeCard = timeCard;
+	}
+
+	public void setEmployee(Employee employee)
+	{
+		this.employee = employee;
+	}
+
+
 
 	public Employee getEmployee()
 	{

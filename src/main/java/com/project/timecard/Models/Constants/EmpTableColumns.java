@@ -2,6 +2,7 @@ package com.project.timecard.Models.Constants;
 
 public enum EmpTableColumns
 {
+	work_date,
 	shiftBegin,
 	shiftEnd,
 	mealBegin,

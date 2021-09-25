@@ -8,7 +8,7 @@ public class Employee
 	private final String firstName;
 	private final String lastName;
 	private long empId;
-	private final String empPass;
+	private String empPass;
 	private final double pay;
 
 	public Employee(String firstName, String lastName, String empPass, double pay)
@@ -17,6 +17,14 @@ public class Employee
 		this.lastName = lastName;
 		this.empId = EmployeeIDGenerator.generateID();
 		this.empPass = EncryptPassword.encryptPassword(empPass);
+		this.pay = pay;
+	}
+
+	public Employee(String firstName, String lastName, Long empId, double pay)
+	{
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.empId = empId;
 		this.pay = pay;
 	}
 
