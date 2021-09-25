@@ -201,7 +201,7 @@ public class DatabaseHandler
 		PreparedStatement preparedStatement = null;
 		String query = "UPDATE employee_" + empId
 				+ " set shiftEnd = ?, mealBegin = ?, " +
-				"mealEnd = ? where work_date = ?";
+				"mealEnd = ?, grossPay = ?, hours = ? where work_date = ?";
 
 		try{
 			preparedStatement = connection.prepareStatement(query);
@@ -223,7 +223,19 @@ public class DatabaseHandler
 			}else {
 				preparedStatement.setString(3, null);
 			}
-			preparedStatement.setString(4,shift.getDate().toString());
+			if(shift.getGrossPay() != 0.0){
+				preparedStatement.setString(4, Double.toString(shift.getGrossPay()));
+				System.out.println("Pay added");
+			}else {
+				preparedStatement.setString(4, null);
+			}
+			if(shift.getShiftDuration() != null){
+				preparedStatement.setString(5, shift.getShiftDuration().toString());
+				System.out.println("hours added");
+			}else {
+				preparedStatement.setString(5, null);
+			}
+			preparedStatement.setString(6,shift.getDate().toString());
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {

@@ -187,6 +187,7 @@ public class ClockInController implements Initializable
 		}else if(!shift.getTimeCard().isMealBreakStarted()
 				|| (shift.getTimeCard().isMealBreakStarted() && shift.getTimeCard().isMealBreakFinished())){
 			shift.getTimeCard().clockOut(LocalTime.now());
+			shift.calculateShiftData();
 			if (databaseHandler.updateShift(id, shift)) {
 				informUser(id + ": Clocked Out!");
 			} else {

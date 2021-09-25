@@ -47,6 +47,8 @@ public class Shift
 		}
 		setShiftDuration(tempShiftDuration);
 		setGrossPay(calculateGrossPay());
+		System.out.println("Gross Pay: $" + getGrossPay());
+		System.out.println("Hours worked: " + getShiftDuration());
 	}
 
 	private double calculateGrossPay()
@@ -64,8 +66,8 @@ public class Shift
 
 	private LocalTime calculateTimeDifference(LocalTime start, LocalTime end)
 	{
-		double tempHours = calculateTotalHoursWorked(start.toSecondOfDay()
-				- end.toSecondOfDay());
+		double tempHours = Math.abs(calculateTotalHoursWorked(end.toSecondOfDay()
+				- start.toSecondOfDay()));
 		BigDecimal bigDecimalTotalHours = new BigDecimal(tempHours);
 		int hours = bigDecimalTotalHours.intValue();
 		double decimalPart = bigDecimalTotalHours.subtract(new BigDecimal(hours)).
