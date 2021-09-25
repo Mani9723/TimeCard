@@ -189,9 +189,9 @@ public class ClockInController implements Initializable
 			shift.getTimeCard().clockOut(LocalTime.now());
 			shift.calculateShiftData();
 			if (databaseHandler.updateShift(id, shift)) {
-				informUser(id + ": Clocked Out!");
+				informUser(shift.getEmployee().getFirstName() + ": Clocked Out!");
 			} else {
-				informUser(id + ": Error Clocking Out");
+				informUser(shift.getEmployee().getFirstName() + ": Error Clocking Out");
 			}
 		}
 	}
@@ -206,9 +206,9 @@ public class ClockInController implements Initializable
 		else {
 			shift.getTimeCard().clockMealBreakBegin(LocalTime.now());
 			if (databaseHandler.updateShift(id, shift)) {
-				informUser(id + ": Meal Clocked In!");
+				informUser(shift.getEmployee().getFirstName() + ": Meal Clocked In!");
 			} else {
-				informUser(id + ": Error Clocking In");
+				informUser(shift.getEmployee().getFirstName() + ": Error Clocking In");
 			}
 		}
 	}
@@ -219,12 +219,12 @@ public class ClockInController implements Initializable
 				&& shift.getTimeCard().getShiftEnd() == null) {
 			shift.getTimeCard().clockMealBreakEnd(LocalTime.now());
 			if (databaseHandler.updateShift(id, shift)) {
-				informUser(id + ": Meal Clocked Out!");
+				informUser(shift.getEmployee().getFirstName() + ": Meal Clocked Out!");
 			} else {
-				informUser(id + ": Error Clocking Out");
+				informUser(shift.getEmployee().getFirstName() + ": Error Clocking Out");
 			}
 		}else{
-			informUser(id + ": Error");
+			informUser(shift.getEmployee().getFirstName() + ": Error");
 		}
 	}
 
