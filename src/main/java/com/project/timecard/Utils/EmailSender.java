@@ -1,6 +1,8 @@
 package com.project.timecard.Utils;
 
 
+import com.project.timecard.Models.Objects.Email;
+
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -32,12 +34,20 @@ public class EmailSender
 		emailSender.send();
 	}
 
-	public EmailSender()
+	EmailSender()
 	{
 		this.emailUsername = from;
 		this.password = "srilaprabhupada";
 	}
-	public EmailSender(String tempPassword)
+
+	public EmailSender(Email email)
+	{
+		this();
+		recipient = email.getTo();
+		subject = email.getSubject();
+		content = email.getContent();
+	}
+	 EmailSender(String tempPassword)
 	{
 		this();
 		if (tempPassword != null)
@@ -46,7 +56,7 @@ public class EmailSender
 		setSubject("Password Reset");
 	}
 
-	public EmailSender( boolean sendStatement)
+	 EmailSender( boolean sendStatement)
 	{
 		this();
 		this.sendStatement = sendStatement;
@@ -56,22 +66,22 @@ public class EmailSender
 		}
 	}
 
-	public void setContent(String subject, String message)
+	private void setContent(String subject, String message)
 	{
 		setSubject(subject);
 		this.content = message;
 	}
 
-	public void setRecipient(String recipient)
+	private void setRecipient(String recipient)
 	{
 		this.recipient = recipient;
 	}
 
-	public void setFilePath(String path)
+	private void setFilePath(String path)
 	{
 		filePath = path;
 	}
-	public void setFileName(String name)
+	private void setFileName(String name)
 	{
 		this.name = name;
 	}
@@ -141,7 +151,7 @@ public class EmailSender
 		System.out.println("Done in: " + (System.currentTimeMillis() - start) + "ms");
 	}
 
-	private void send() throws RuntimeException
+	public void send() throws RuntimeException
 	{
 		Properties properties = new Properties();
 		properties.put("mail.smtp.auth", "true");
