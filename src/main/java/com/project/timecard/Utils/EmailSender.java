@@ -151,7 +151,7 @@ public class EmailSender
 		System.out.println("Done in: " + (System.currentTimeMillis() - start) + "ms");
 	}
 
-	public void send() throws RuntimeException
+	public boolean send() throws RuntimeException
 	{
 		Properties properties = new Properties();
 		properties.put("mail.smtp.auth", "true");
@@ -169,12 +169,17 @@ public class EmailSender
 				});
 
 		try {
-			if(!this.sendStatement)
+			if(!this.sendStatement) {
 				sendNormalEmail(session);
-			else
+				return true;
+			}
+			else {
 				sendStatement(session);
+				return true;
+			}
 		} catch (MessagingException e) {
-			throw new RuntimeException(e);
+			return false;
 		}
+
 	}
 }

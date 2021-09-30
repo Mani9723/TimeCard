@@ -106,13 +106,12 @@ public class NewEmployeeController implements Initializable
 
 	private void finalizeRegistration(Employee employee)
 	{
-		Task task = new Task()
+		Task<Boolean> task = new Task<>()
 		{
 			@Override
-			protected Object call() throws Exception
+			protected Boolean call() throws Exception
 			{
-				sendEmail(employee);
-				return null;
+				return sendEmail(employee);
 			}
 		};
 		new Thread(task).start();
@@ -121,7 +120,7 @@ public class NewEmployeeController implements Initializable
 
 	}
 
-	private void sendEmail(Employee employee)
+	private boolean sendEmail(Employee employee)
 	{
 		System.out.println("In email method");
 		Email email = new Email("mani.shah23@gmail.com",
@@ -130,7 +129,7 @@ public class NewEmployeeController implements Initializable
 						"Your Employee ID is " + employee.getEmpId() +
 						". Your pay is $"+employee.getPay() +".");
 		EmailSender emailSender = new EmailSender(email);
-		emailSender.send();
+		return emailSender.send();
 	}
 
 	private void informUser(String message)
