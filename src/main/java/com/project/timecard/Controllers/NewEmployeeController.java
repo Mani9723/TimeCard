@@ -125,7 +125,8 @@ public class NewEmployeeController implements Initializable
 		System.out.println("In email method");
 		Email email = new Email("mani.shah23@gmail.com",
 				"Welcome to Modern Prison",
-				"You have successfully registered. " +
+				employee.getFirstName() +
+						", You have successfully registered. " +
 						"Your Employee ID is " + employee.getEmpId() +
 						". Your pay is $"+employee.getPay() +".");
 		EmailSender emailSender = new EmailSender(email);

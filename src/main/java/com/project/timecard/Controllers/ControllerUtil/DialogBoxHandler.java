@@ -39,12 +39,12 @@ public class DialogBoxHandler
 		this.dialog = dialog;
 		JFXDialogLayout dialogLayout = new JFXDialogLayout();
 		JFXButton button = new JFXButton("Return");
-		button.setAlignment(Pos.CENTER);
-		button.setPrefSize(70,35);
+//		button.setAlignment(Pos.CENTER);
+//		button.setPrefSize(70,35);
 		button.setTextFill(Paint.valueOf("black"));
 		button.setButtonType(JFXButton.ButtonType.RAISED);
 		button.setBackground(new Background(new BackgroundFill(Paint.valueOf("#e9e9e9"),null,null)));
-		this.dialog = new JFXDialog(stackPane,dialogLayout,JFXDialog.DialogTransition.CENTER);
+		this.dialog = new JFXDialog(stackPane,dialogLayout,JFXDialog.DialogTransition.TOP);
 		this.dialog.toFront();
 		this.dialog.requestFocus();
 		button.setFocusTraversable(true);
@@ -58,17 +58,17 @@ public class DialogBoxHandler
 
 		Label label = new Label(buttonMessage);
 		label.setTextFill(Color.valueOf("black"));
-		label.setContentDisplay(ContentDisplay.CENTER);
+//		label.setContentDisplay(ContentDisplay.CENTER);
 		dialogFinish(dialogLayout,button,label);
 	}
 
 	private void dialogFinish(JFXDialogLayout dialogLayout, JFXButton button, Label label)
 	{
 		dialogLayout.setBody(label);
-		dialogLayout.setAlignment(Pos.CENTER);
+//		dialogLayout.setAlignment(Pos.CENTER);
 		dialogLayout.setActions(button);
-		dialogLayout.setBackground(new Background(
-				new BackgroundFill(Color.valueOf("bfe0ff"),null,null)));
+//		dialogLayout.setBackground(new Background(
+//				new BackgroundFill(Color.valueOf("bfe0ff"),null,null)));
 		this.dialog.show();
 		parent.setEffect(gaussianBlur);
 	}
