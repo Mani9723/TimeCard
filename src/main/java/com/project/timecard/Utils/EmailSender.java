@@ -56,16 +56,6 @@ public class EmailSender
 		setSubject("Password Reset");
 	}
 
-	 EmailSender( boolean sendStatement)
-	{
-		this();
-		this.sendStatement = sendStatement;
-		if(this.sendStatement){
-			this.subject = "\t\tBANK OF AMERICAN\n\t\tSTATEMENT";
-			this.content = "Dear Customer,\n\t Your statement is attached.\n";
-		}
-	}
-
 	private void setContent(String subject, String message)
 	{
 		setSubject(subject);

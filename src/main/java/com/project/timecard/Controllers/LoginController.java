@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
 import java.net.URL;
@@ -36,9 +35,6 @@ public class LoginController implements Initializable
 	private AnchorPane loginAnchorPane;
 
 	@FXML
-	private GridPane gridPane;
-
-	@FXML
 	private TextField empIdField;
 
 	@FXML
@@ -55,9 +51,6 @@ public class LoginController implements Initializable
 
 	@FXML
 	private JFXButton loginReturnButton;
-
-	@FXML
-	private Label noticeLabel;
 
 	@FXML
 	private Label timeLabel;
@@ -136,7 +129,7 @@ public class LoginController implements Initializable
 			try {
 				result = processEmployeeLogin();
 			}catch (NumberFormatException e){
-				result = false;
+				e.printStackTrace();
 			}
 			if(result){
 				informUser("Success!");
