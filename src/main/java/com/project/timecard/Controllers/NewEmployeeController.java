@@ -81,23 +81,24 @@ public class NewEmployeeController implements Initializable
 			Long[] ids = new Long[10];
 			for (int i = 0; i < ids.length; i++) {
 				ids[i] = EmployeeIDGenerator.generateID();
-				if (!databaseHandler.usernameExists(Long.toString(ids[i]))) {
+				if (fieldsFilled() && !databaseHandler.usernameExists(Long.toString(ids[i]))) {
 					idLabel.setText(idLabel.getText() + " " + ids[i]);
 					payLabel.setText(payLabel.getText() + "12.00");
-					if (fieldsFilled()) {
-						Employee employee = new Employee(firstNameField.getText(),
-								lastNameField.getText(), passwordField.getText(), 12.0);
-						employee.setEmpId(ids[i]);
-						try {
-							databaseHandler.addNewEmployee(employee);
-							finalizeRegistration(employee);
-						} catch (SQLException e) {
-							informUser("Error adding you to the system");
-						}
-						return;
-					}else{
-						informUser("Please Fill out all of the fields");
+					Employee employee = new Employee(firstNameField.getText(),
+							lastNameField.getText(), passwordField.getText(), 12.0);
+					employee.setEmpId(ids[i]);
+					try {
+						databaseHandler.addNewEmployee(employee);
+						finalizeRegistration(employee);
+					} catch (SQLException e) {
+						informUser("Error adding you to the system");
+						break;
 					}
+					return;
+				}
+				else{
+					informUser("Please Fill out all of the fields");
+					break;
 				}
 			}
 		}

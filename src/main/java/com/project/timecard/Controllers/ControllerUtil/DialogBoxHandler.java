@@ -18,6 +18,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.Random;
+
 public class DialogBoxHandler
 {
 	private StackPane stackPane;
@@ -44,7 +46,7 @@ public class DialogBoxHandler
 		button.setTextFill(Paint.valueOf("black"));
 		button.setButtonType(JFXButton.ButtonType.RAISED);
 		button.setBackground(new Background(new BackgroundFill(Paint.valueOf("#e9e9e9"),null,null)));
-		this.dialog = new JFXDialog(stackPane,dialogLayout,JFXDialog.DialogTransition.TOP);
+		this.dialog = new JFXDialog(stackPane,dialogLayout,dialogTransition());
 		this.dialog.toFront();
 		this.dialog.requestFocus();
 		button.setFocusTraversable(true);
@@ -60,6 +62,26 @@ public class DialogBoxHandler
 		label.setTextFill(Color.valueOf("black"));
 //		label.setContentDisplay(ContentDisplay.CENTER);
 		dialogFinish(dialogLayout,button,label);
+	}
+
+	private JFXDialog.DialogTransition dialogTransition()
+	{
+		int n = new Random().nextInt(5)+1;
+		System.out.println(n);
+		switch (n){
+			case 1:
+				return JFXDialog.DialogTransition.TOP;
+			case 2:
+				return JFXDialog.DialogTransition.BOTTOM;
+			case 3:
+				return JFXDialog.DialogTransition.CENTER;
+			case 4:
+				return JFXDialog.DialogTransition.RIGHT;
+			case 5:
+				return JFXDialog.DialogTransition.LEFT;
+			default:
+				return JFXDialog.DialogTransition.NONE;
+		}
 	}
 
 	private void dialogFinish(JFXDialogLayout dialogLayout, JFXButton button, Label label)

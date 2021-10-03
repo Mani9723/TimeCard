@@ -35,12 +35,12 @@
                   <Font size="14.0" />
                </font>
             </JFXButton>
-            <Label layoutX="216.0" layoutY="30.0" text="Time Card Systems" textFill="WHITE">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="155.0" layoutY="22.0" prefHeight="35.0" prefWidth="190.0" text="Time Card Systems" textFill="WHITE" AnchorPane.bottomAnchor="443" AnchorPane.leftAnchor="155" AnchorPane.rightAnchor="155" AnchorPane.topAnchor="22">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="timeLabel" layoutX="220.0" layoutY="90.0" prefHeight="21.0" prefWidth="167.0" textFill="WHITE">
+            <Label fx:id="timeLabel" layoutX="215.0" layoutY="90.0" prefHeight="21.0" prefWidth="167.0" textFill="WHITE">
                <font>
                   <Font name="Consolas" size="17.0" />
                </font>
@@ -80,12 +80,12 @@
                   </Label>
                </children>
             </GridPane>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="25.0" layoutX="24.0" layoutY="32.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="66.0">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00efff" height="25.0" layoutX="16.0" layoutY="26.0" opacity="0.37" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="51.0">
                <effect>
                   <GaussianBlur />
                </effect>
             </Rectangle>
-            <JFXButton fx:id="loginReturnButton" buttonType="RAISED" layoutX="24.0" layoutY="32.0" onAction="#onReturnButtonClicked" prefHeight="25.0" prefWidth="66.0" text="Return" />
+            <JFXButton fx:id="loginReturnButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutX="16.0" layoutY="26.0" onAction="#onReturnButtonClicked" text="Return" />
          </children>
       </AnchorPane>
    </children>
