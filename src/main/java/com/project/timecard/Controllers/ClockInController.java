@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
@@ -90,6 +91,7 @@ public class ClockInController implements Initializable
 		setEmployeeIdInfoVisibility(false);
 		Clock.startClock(clockScreentimeLabel);
 		dialogBoxHandler = new DialogBoxHandler(clockInStackPane, clockInAnchorPane);
+		clockInSubmitButton.setVisible(false);
 	}
 
 	public void init(DatabaseHandler database)
@@ -279,4 +281,12 @@ public class ClockInController implements Initializable
 		submitRect.setVisible(visibility);
 	}
 
+	public void handleIdKeyRelease(KeyEvent keyEvent)
+	{
+		if(employeeIdField.getText().length() >= 6){
+			clockInSubmitButton.setVisible(true);
+		}if(employeeIdField.getText().length() < 6){
+			clockInSubmitButton.setVisible(false);
+		}
+	}
 }

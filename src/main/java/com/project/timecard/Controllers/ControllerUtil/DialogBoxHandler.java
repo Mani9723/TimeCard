@@ -66,7 +66,8 @@ public class DialogBoxHandler
 
 	private JFXDialog.DialogTransition dialogTransition()
 	{
-		int n = new Random().nextInt(5)+1;
+//		int n = new Random().nextInt(5)+1;
+		int n = 3;
 		System.out.println(n);
 		switch (n){
 			case 1:

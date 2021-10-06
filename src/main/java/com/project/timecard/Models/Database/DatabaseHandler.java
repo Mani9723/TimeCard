@@ -7,6 +7,7 @@ import com.project.timecard.Models.Objects.Employee;
 import com.project.timecard.Models.Objects.Shift;
 import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.EncryptPassword;
+import com.project.timecard.Utils.PayrollCalendar;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -38,6 +39,7 @@ public class DatabaseHandler
 		}
 		try {
 			checkIfTableExists();
+			PayrollCalendar.calculatePayrollCalendar();
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
