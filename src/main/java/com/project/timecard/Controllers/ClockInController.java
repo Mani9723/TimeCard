@@ -104,7 +104,7 @@ public class ClockInController implements Initializable
 	@FXML
 	public void onTimeButtonsClicked(ActionEvent event)
 	{
-		setEmployeeIdInfoVisibility(true);
+		employeeIdField.setVisible(true);
 		selectionEvent = event;
 
 		if(event.getSource().equals(clockInButton)){
@@ -284,9 +284,12 @@ public class ClockInController implements Initializable
 	public void handleIdKeyRelease(KeyEvent keyEvent)
 	{
 		if(employeeIdField.getText().length() >= 6){
-			clockInSubmitButton.setVisible(true);
-		}if(employeeIdField.getText().length() < 6){
+			setEmployeeIdInfoVisibility(true);
+			employeeIdField.setVisible(true);
+		}
+		if(employeeIdField.getText().length() < 6){
 			clockInSubmitButton.setVisible(false);
+			submitRect.setVisible(false);
 		}
 	}
 }

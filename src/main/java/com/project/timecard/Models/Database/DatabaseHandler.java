@@ -112,11 +112,11 @@ public class DatabaseHandler
 				+ EmpTableColumns.hours.name() +" text,\n"
 				+ EmpTableColumns.overtimeHours.name() +" text ,\n"
 				+ EmpTableColumns.grossPay.name() +" text,\n"
-				+ EmpTableColumns.overtimePay.name() +" text \n"
-				+ EmpTableColumns.ytdHours +" text \n"
-				+ EmpTableColumns.ytdOvertimeHours.name() +" text \n"
-				+ EmpTableColumns.ytdGross.name() +" text \n"
-				+ EmpTableColumns.ytdOvertimePay.name() +" text \n"
+				+ EmpTableColumns.overtimePay.name() +" text, \n"
+				+ EmpTableColumns.ytdHours +" text, \n"
+				+ EmpTableColumns.ytdOvertimeHours.name() +" text, \n"
+				+ EmpTableColumns.ytdGross.name() +" text, \n"
+				+ EmpTableColumns.ytdOvertimePay.name() +" text, \n"
 				+")";
 		createPrepStmtExecute(query);
 		System.out.println("Statement Table created: " + user);
