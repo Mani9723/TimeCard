@@ -7,5 +7,6 @@ public enum MainTableColumns
 	empId,
 	empPass,
 	empStatus,
-	empPay
+	empPay,
+	ytd_gross
 }

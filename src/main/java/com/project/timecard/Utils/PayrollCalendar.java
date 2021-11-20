@@ -12,6 +12,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class PayrollCalendar
 {
@@ -54,5 +55,18 @@ public class PayrollCalendar
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean isPayDay()
+	{
+		String date = LocalDate.now().toString();
+		Stream<String> dates = null;
+		try {
+			dates = Files.lines(Path.of(path)).filter(s -> s.trim().contains(date));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		assert dates != null;
+		return dates.findAny().isPresent();
 	}
 }

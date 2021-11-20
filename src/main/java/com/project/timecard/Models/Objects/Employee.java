@@ -9,6 +9,13 @@ public class Employee
 	private final String lastName;
 	private long empId;
 	private String empPass;
+
+	public void setYtd_gross(double ytd_gross)
+	{
+		this.ytd_gross = ytd_gross;
+	}
+
+	private double ytd_gross;
 	private final double pay;
 
 	public Employee(String firstName, String lastName, String empPass, double pay)
@@ -20,17 +27,23 @@ public class Employee
 		this.pay = pay;
 	}
 
-	public Employee(String firstName, String lastName, Long empId, double pay)
+	public Employee(String firstName, String lastName, Long empId, double pay,double ytd_gross)
 	{
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.empId = empId;
 		this.pay = pay;
+		this.ytd_gross = ytd_gross;
 	}
 
 	public String getFirstName()
 	{
 		return firstName;
+	}
+
+	public double getYtd_gross()
+	{
+		return ytd_gross;
 	}
 
 	public String getLastName()

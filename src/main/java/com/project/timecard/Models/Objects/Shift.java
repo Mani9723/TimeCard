@@ -13,8 +13,9 @@ public class Shift
 	private LocalTime mealDuration;
 	private double grossPay;
 	private double totalHours;
+	private double ytd_gross = 0.0;
 
-	public Shift()
+	public  Shift()
 	{
 		this.date = null;
 		this.timeCard = null;
@@ -37,6 +38,7 @@ public class Shift
 
 	public void calculateShiftData()
 	{
+		ytd_gross = employee.getYtd_gross();
 		LocalTime tempShiftDuration = calculateTimeDifference(timeCard.getShiftBegin()
 				,timeCard.getShiftEnd());
 
@@ -47,6 +49,7 @@ public class Shift
 		}
 		setShiftDuration(tempShiftDuration);
 		setGrossPay(calculateGrossPay());
+		ytd_gross += getGrossPay();
 		System.out.println("Gross Pay: $" + getGrossPay());
 		System.out.println("Hours worked: " + getShiftDuration());
 	}
@@ -103,6 +106,15 @@ public class Shift
 		return date;
 	}
 
+	public double getYtd_gross()
+	{
+		return ytd_gross;
+	}
+
+	public void setYtd_gross(double ytd_gross){
+		this.ytd_gross = ytd_gross;
+	}
+
 	public TimeCard getTimeCard()
 	{
 		return timeCard;
@@ -140,7 +152,22 @@ public class Shift
 				", timeCard=" + timeCard +
 				", employee=" + employee +
 				", shiftDuration=" + shiftDuration +
-				", grossPay=$" + grossPay +
+				", mealDuration=" + mealDuration +
+				", grossPay=" + grossPay +
+				", totalHours=" + totalHours +
+				", ytd_gross=" + ytd_gross +
 				'}';
 	}
+
+	//	@Override
+//	public String toString()
+//	{
+//		return "Shift{" +
+//				"date=" + date +
+//				", timeCard=" + timeCard +
+//				", employee=" + employee +
+//				", shiftDuration=" + shiftDuration +
+//				", grossPay=$" + grossPay +
+//				'}';
+//	}
 }

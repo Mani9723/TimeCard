@@ -9,6 +9,7 @@ import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.EncryptPassword;
 import com.project.timecard.Utils.PayrollCalendar;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 @SuppressWarnings("SqlResolve")
 public class DatabaseHandler
@@ -40,10 +42,24 @@ public class DatabaseHandler
 		try {
 			checkIfTableExists();
 			PayrollCalendar.calculatePayrollCalendar();
+			checkIfPayDay();
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
 	}
+
+	private void checkIfPayDay()
+	{
+		if(PayrollCalendar.isPayDay()){
+			updateDatabasePayDay();
+		}
+	}
+
+	private void updateDatabasePayDay()
+	{
+
+	}
+
 	/**
 	 * Method verifies that the database for the application exists.
 	 * If it does not exist then it implies that this is a first time use
@@ -175,8 +191,8 @@ public class DatabaseHandler
 	{
 		PreparedStatement preparedStatement = null;
 
-		String query = "INSERT into EMPS_TABLE(firstName, lastName,empId,empPass,empStatus,empPay)" +
-				"VALUES(?,?,?,?,?,?)";
+		String query = "INSERT into EMPS_TABLE(firstName, lastName,empId,empPass,empStatus,empPay,ytd_gross)" +
+				"VALUES(?,?,?,?,?,?,?)";
 
 		try{
 			preparedStatement = connection.prepareStatement(query);
@@ -186,6 +202,7 @@ public class DatabaseHandler
 			preparedStatement.setString(4, employee.getEmpPass());
 			preparedStatement.setString(5, "Employed");
 			preparedStatement.setString(6, "12.0");
+			preparedStatement.setString(7, "0.00");
 			System.out.println("Adding new employee");
 			preparedStatement.executeUpdate();
 			System.out.println("Employee Added\nCreating Employee Shift table");
@@ -195,6 +212,23 @@ public class DatabaseHandler
 		} finally {
 			assert preparedStatement != null;
 			preparedStatement.close();
+		}
+	}
+
+	public boolean updateYtdGross(String empId, double ytd_gross, LocalDate date)
+	{
+		PreparedStatement preparedStatement = null;
+		String query = "UPDATE employee_"+empId
+				+ " set ytdGross = ? where work_date = ?";
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,Double.toString(ytd_gross));
+			preparedStatement.setString(2,date.toString());
+			preparedStatement.executeUpdate();
+			return true;
+		}catch (SQLException e){
+		return false;
 		}
 	}
 
@@ -238,6 +272,7 @@ public class DatabaseHandler
 				preparedStatement.setString(5, null);
 			}
 			preparedStatement.setString(6,shift.getDate().toString());
+
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -256,8 +291,8 @@ public class DatabaseHandler
 	public boolean addNewShift(Shift shift)
 	{
 		PreparedStatement preparedStatement = null;
-		String query = "INSERT INTO employee_" + shift.getEmployee().getEmpId() + "(work_date, shiftBegin) " +
-				"VALUES(?,?)";
+		String query = "INSERT INTO employee_" + shift.getEmployee().getEmpId() + "(work_date, shiftBegin,ytdGross) " +
+				"VALUES(?,?,?)";
 		try{
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1,shift.getDate().toString());
@@ -267,6 +302,7 @@ public class DatabaseHandler
 			}else{
 				preparedStatement.setString(1, null);
 			}
+			preparedStatement.setString(3,Double.toString(shift.getYtd_gross()));
 			preparedStatement.execute();
 		}catch (SQLException e){
 			e.printStackTrace();
@@ -282,6 +318,31 @@ public class DatabaseHandler
 
 		System.out.println(query);
 		return true;
+	}
+
+	public String getLastShift(String empId)
+	{
+		// SELECT * FROM employee_718416 where ROWID == (SELECT MAX(ROWID) FROM employee_718416);
+
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String query = "SELECT "+EmpTableColumns.ytdGross+" FROM employee_"+empId
+				+" where ROWID == (SELECT MAX(ROWID) FROM employee_"+empId+");";
+		System.out.println(query);
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				return resultSet.getString("ytdGross");
+			}else{
+				return null;
+			}
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+
 	}
 
 	public Shift getShift(String empId)
@@ -377,11 +438,13 @@ public class DatabaseHandler
 						.getString(MainTableColumns.empId.name()));
 				double pay = Double.parseDouble(resultSet
 						.getString(MainTableColumns.empPay.name()));
+				double ytd_gross = Double.parseDouble(resultSet.getString(MainTableColumns.ytd_gross.name()));
 				employee = new Employee(
 						resultSet.getString(MainTableColumns.firstName.name()),
 						MainTableColumns.lastName.name(),
 						empId,
-						pay);
+						pay,
+						ytd_gross);
 			}
 
 		}catch (SQLException e){
@@ -419,6 +482,35 @@ public class DatabaseHandler
 		}
 		return false;
 	}
+
+//	public ArrayList<Shift> getPayPeriodShifts(String empId, LocalDate start, LocalDate end)
+//	{
+//		PreparedStatement preparedStatement = null;
+//		ResultSet resultSet = null;
+//		String query = "SELECT * FROM employee_"+empId
+//				+ " where work_date < ? and work_date > ?";
+//		try{
+//			preparedStatement = connection.prepareStatement(query);
+//			preparedStatement.setString(1,start.toString());
+//			preparedStatement.setString(2,end.toString());
+//
+//			resultSet = preparedStatement.executeQuery();
+//			ArrayList<Shift> shifts = new ArrayList<>();
+//			if(resultSet.next()){
+//				Shift shift = new Shift();
+//				shift.setShiftDuration(resultSet.getString(EmpTableColumns.hours.name()));
+//
+//
+//
+//				return shifts;
+//			}
+//
+//		}catch (SQLException e){
+//			e.printStackTrace();
+//			return null;
+//		}
+//		return null;
+//	}
 
 
 }

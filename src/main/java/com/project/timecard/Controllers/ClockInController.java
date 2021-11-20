@@ -162,6 +162,7 @@ public class ClockInController implements Initializable
 				} else if(!selectionEvent.getSource().equals(clockInButton)){
 					shift.setEmployee(employee);
 					if (selectionEvent.getSource().equals(clockOutButton)) {
+						employee.setYtd_gross(Double.parseDouble(databaseHandler.getLastShift(id)));
 						handleClockOut(id,shift);
 					} else if (selectionEvent.getSource().equals(mealInButton)) {
 						handleMealBegin(id,shift);
@@ -190,7 +191,8 @@ public class ClockInController implements Initializable
 				|| (shift.getTimeCard().isMealBreakStarted() && shift.getTimeCard().isMealBreakFinished())){
 			shift.getTimeCard().clockOut(LocalTime.now());
 			shift.calculateShiftData();
-			if (databaseHandler.updateShift(id, shift)) {
+			if (databaseHandler.updateShift(id, shift)
+					&& databaseHandler.updateYtdGross(id,shift.getYtd_gross(),shift.getDate())) {
 				informUser(shift.getEmployee().getFirstName() + ": Clocked Out!");
 			} else {
 				informUser(shift.getEmployee().getFirstName() + ": Error Clocking Out");
@@ -237,6 +239,9 @@ public class ClockInController implements Initializable
 		shift.setDate(LocalDate.now());
 		shift.setEmployee(employee);
 		shift.setTimeCard(timeCard);
+		String gross = databaseHandler.getLastShift(Long.toString(employee.getEmpId()));
+		System.out.println(gross);
+		shift.setYtd_gross(Double.parseDouble(gross));
 		if(databaseHandler.addNewShift(shift)) {
 			informUser(employee.getFirstName() + ": Clocked In!");
 		}else{
