@@ -6,6 +6,7 @@ import com.project.timecard.Controllers.ControllerUtil.DialogBoxHandler;
 import com.project.timecard.Controllers.ControllerUtil.SceneTransitioner;
 import com.project.timecard.Models.Database.DatabaseHandler;
 import com.project.timecard.Models.Objects.Employee;
+import com.project.timecard.Models.Objects.Paystub;
 import com.project.timecard.Models.Objects.Shift;
 import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.Clock;
@@ -151,6 +152,13 @@ public class ClockInController implements Initializable
 			if(result && databaseHandler.usernameExists(employeeIdField.getText())) {
 				id = employeeIdField.getText();
 				employee = databaseHandler.getEmployee(id);
+				Paystub paystub;
+				paystub = new Paystub(employee,
+						databaseHandler.getPayPeriodShifts(id,LocalDate.of(2021,10,4),
+								LocalDate.of(2021,11,20)));
+				paystub.calcData();
+				System.out.println(paystub);
+				System.exit(-1);
 				shift = databaseHandler.getShift(id);
 
 				if(shift == null) {

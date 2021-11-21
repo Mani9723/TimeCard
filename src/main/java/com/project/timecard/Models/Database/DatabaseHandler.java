@@ -441,7 +441,7 @@ public class DatabaseHandler
 				double ytd_gross = Double.parseDouble(resultSet.getString(MainTableColumns.ytd_gross.name()));
 				employee = new Employee(
 						resultSet.getString(MainTableColumns.firstName.name()),
-						MainTableColumns.lastName.name(),
+						resultSet.getString(MainTableColumns.lastName.name()),
 						empId,
 						pay,
 						ytd_gross);
@@ -483,34 +483,35 @@ public class DatabaseHandler
 		return false;
 	}
 
-//	public ArrayList<Shift> getPayPeriodShifts(String empId, LocalDate start, LocalDate end)
-//	{
-//		PreparedStatement preparedStatement = null;
-//		ResultSet resultSet = null;
-//		String query = "SELECT * FROM employee_"+empId
-//				+ " where work_date < ? and work_date > ?";
-//		try{
-//			preparedStatement = connection.prepareStatement(query);
-//			preparedStatement.setString(1,start.toString());
-//			preparedStatement.setString(2,end.toString());
-//
-//			resultSet = preparedStatement.executeQuery();
-//			ArrayList<Shift> shifts = new ArrayList<>();
-//			if(resultSet.next()){
-//				Shift shift = new Shift();
-//				shift.setShiftDuration(resultSet.getString(EmpTableColumns.hours.name()));
-//
-//
-//
-//				return shifts;
-//			}
-//
-//		}catch (SQLException e){
-//			e.printStackTrace();
-//			return null;
-//		}
-//		return null;
-//	}
+	public ArrayList<Shift> getPayPeriodShifts(String empId, LocalDate start, LocalDate end)
+	{
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String query = "SELECT * FROM employee_"+empId
+				+ " where work_date < ? and work_date > ?";
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1,end.toString());
+			preparedStatement.setString(2,start.toString());
+			System.out.println(preparedStatement.toString());
+			resultSet = preparedStatement.executeQuery();
+			ArrayList<Shift> shifts = new ArrayList<>();
+			while(resultSet.next()){
+				Shift shift = new Shift();
+				String hours = resultSet.getString(EmpTableColumns.hours.name());
+				shift.setDate(LocalDate.parse(resultSet.getString(EmpTableColumns.work_date.name())));
+				shift.setGrossPay(Double.parseDouble(resultSet.getString(EmpTableColumns.grossPay.name())));
+				shift.setShiftDuration(LocalTime.of(Integer.parseInt(hours.split(":")[0])
+						,Integer.parseInt(hours.split(":")[1])));
+				shift.setYtd_gross(Double.parseDouble(resultSet.getString(EmpTableColumns.ytdGross.name())));
+				shifts.add(shift);
+			}
+			return shifts;
+		}catch (SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 
 }

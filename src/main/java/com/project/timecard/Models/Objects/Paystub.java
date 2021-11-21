@@ -1,5 +1,7 @@
 package com.project.timecard.Models.Objects;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -28,6 +30,7 @@ public class Paystub
 
 	public void calcData()
 	{
+
 		calcTotalHoursGross();
 		adjustGross();
 		calcNetPay();
@@ -54,8 +57,21 @@ public class Paystub
 
 	private void calcNetPay()
 	{
-		netPay = totalGross*TAX_RATE;
-		tax = totalGross - netPay;
+		tax = totalGross*TAX_RATE;
+		netPay = totalGross - tax;
+		BigDecimal bigDecimalGross = new BigDecimal(totalGross)
+				.setScale(3,RoundingMode.HALF_UP);
+		BigDecimal bigDecimalTax = new BigDecimal(tax)
+				.setScale(3,RoundingMode.HALF_UP);
+		BigDecimal bigDecimalNetPat = new BigDecimal(netPay)
+				.setScale(3,RoundingMode.HALF_UP);
+		BigDecimal bigDecimalHours = new BigDecimal(totalHours)
+				.setScale(3,RoundingMode.HALF_UP);
+		totalGross = bigDecimalGross.doubleValue();
+		tax = bigDecimalTax.doubleValue();
+		netPay = bigDecimalNetPat.doubleValue();
+		totalHours = bigDecimalHours.doubleValue();
+
 	}
 
 	@Override
