@@ -24,13 +24,15 @@ public class Paystub
 	{
 		totalHours = 0.0;
 		totalGross = 0.0;
+		netPay = 0.0;
+		tax = 0.0;
 		this.employee = employee;
 		this.shifts = shifts;
+		calcData();
 	}
 
-	public void calcData()
+	private void calcData()
 	{
-
 		calcTotalHoursGross();
 		adjustGross();
 		calcNetPay();
@@ -72,6 +74,11 @@ public class Paystub
 		netPay = bigDecimalNetPat.doubleValue();
 		totalHours = bigDecimalHours.doubleValue();
 
+	}
+
+	public double[] getPayStubInfo()
+	{
+		return new double[]{totalHours,totalGross,tax,netPay};
 	}
 
 	@Override
