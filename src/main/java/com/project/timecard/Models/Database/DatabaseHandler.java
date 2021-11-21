@@ -30,8 +30,6 @@ public class DatabaseHandler
 	private static final String TABLE_NAME = DatabaseFiles.EMPS_TABLE.name();
 	private static Connection connection;
 
-	private LocalDate start,end;
-
 	/**
 	 * Default Constructor. Establishes a connection with the database.
 	 */
@@ -69,10 +67,10 @@ public class DatabaseHandler
 
 	private boolean updateDatabasePayDay(String date)
 	{
-		start = LocalDate.parse(date).minusWeeks(2).minusDays(5);
-		end = LocalDate.parse(date).minusWeeks(1).plusDays(1);
+		LocalDate start = LocalDate.parse(date).minusWeeks(2).minusDays(5);
+		LocalDate end = LocalDate.parse(date).minusWeeks(1).plusDays(1);
 
-		Paystub paystub = new Paystub(getEmployee("718416"),getPayPeriodShifts("718416",start,end));
+		Paystub paystub = new Paystub(getEmployee("718416"),getPayPeriodShifts("718416", start, end));
 		double[] info = paystub.getPayStubInfo();
 		return info.length > 0;
 	}
