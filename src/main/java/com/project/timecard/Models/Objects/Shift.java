@@ -158,16 +158,4 @@ public class Shift
 				", ytd_gross=" + ytd_gross +
 				'}';
 	}
-
-	//	@Override
-//	public String toString()
-//	{
-//		return "Shift{" +
-//				"date=" + date +
-//				", timeCard=" + timeCard +
-//				", employee=" + employee +
-//				", shiftDuration=" + shiftDuration +
-//				", grossPay=$" + grossPay +
-//				'}';
-//	}
 }

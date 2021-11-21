@@ -12,6 +12,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PayrollCalendar
@@ -19,7 +20,7 @@ public class PayrollCalendar
 
 	private static final String path = "src/main/java/com/project/timecard/Utils/TextFiles/payrollCalendar.txt";
 
-	public static void calculatePayrollCalendar()
+	public static void initPayrollCalendar()
 	{
 		File file = new File(path);
 		if(file.exists()){
@@ -44,7 +45,6 @@ public class PayrollCalendar
 			FileWriter fileWriter = new FileWriter(path);
 			do {
 				fridaysInRange.add(currentFriday);
-				fileWriter.write(i+",");
 				fileWriter.write(currentFriday+"\n");
 				currentFriday = currentFriday.plusDays(14);
 				i++;
@@ -57,16 +57,26 @@ public class PayrollCalendar
 		}
 	}
 
-	public static boolean isPayDay()
+	public static String isPayDay()
 	{
-		String date = LocalDate.now().toString();
+//		String date = LocalDate.now().toString();
 		Stream<String> dates = null;
 		try {
-			dates = Files.lines(Path.of(path)).filter(s -> s.trim().contains(date));
+//			dates = Files.lines(Path.of(path)).filter(s -> s.trim().contains(date));
+			dates = Files.lines(Path.of(path));
+			String[] data = dates.collect(Collectors.joining("\n")).split("\n");
+			dates.close();
+			for(int i = data.length-1; i >= 0; i--){
+				int result = LocalDate.now().toString().compareTo(data[i]);
+				if(result > 0){
+					return data[i];
+				}
+			}
+			System.exit(1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		assert dates != null;
-		return dates.findAny().isPresent();
+		return null;
 	}
 }

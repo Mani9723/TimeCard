@@ -4,10 +4,12 @@ import com.project.timecard.Models.Constants.DatabaseFiles;
 import com.project.timecard.Models.Constants.EmpTableColumns;
 import com.project.timecard.Models.Constants.MainTableColumns;
 import com.project.timecard.Models.Objects.Employee;
+import com.project.timecard.Models.Objects.Paystub;
 import com.project.timecard.Models.Objects.Shift;
 import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.EncryptPassword;
 import com.project.timecard.Utils.PayrollCalendar;
+import javafx.concurrent.Task;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -28,6 +30,8 @@ public class DatabaseHandler
 	private static final String TABLE_NAME = DatabaseFiles.EMPS_TABLE.name();
 	private static Connection connection;
 
+	private LocalDate start,end;
+
 	/**
 	 * Default Constructor. Establishes a connection with the database.
 	 */
@@ -40,7 +44,7 @@ public class DatabaseHandler
 		}
 		try {
 			checkIfTableExists();
-			PayrollCalendar.calculatePayrollCalendar();
+			PayrollCalendar.initPayrollCalendar();
 			checkIfPayDay();
 		}catch (SQLException e){
 			e.printStackTrace();
@@ -49,14 +53,28 @@ public class DatabaseHandler
 
 	private void checkIfPayDay()
 	{
-		if(PayrollCalendar.isPayDay()){
-			updateDatabasePayDay();
+		String date = PayrollCalendar.isPayDay();
+		if(date != null){
+			Task<Boolean> task = new Task<Boolean>()
+			{
+				@Override
+				protected Boolean call() throws Exception
+				{
+					return updateDatabasePayDay(date);
+				}
+			};
+			new Thread(task).start();
 		}
 	}
 
-	private void updateDatabasePayDay()
+	private boolean updateDatabasePayDay(String date)
 	{
+		start = LocalDate.parse(date).minusWeeks(2).minusDays(5);
+		end = LocalDate.parse(date).minusWeeks(1).plusDays(1);
 
+		Paystub paystub = new Paystub(getEmployee("718416"),getPayPeriodShifts("718416",start,end));
+		double[] info = paystub.getPayStubInfo();
+		return info.length > 0;
 	}
 
 	/**
