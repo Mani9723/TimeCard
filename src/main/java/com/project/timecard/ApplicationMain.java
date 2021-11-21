@@ -21,31 +21,32 @@ public class ApplicationMain extends Application
 	public void start(Stage stage) throws IOException
 	{
 		DatabaseHandler databaseHandler = new DatabaseHandler();
-		databaseHandler.isDBConnected();
-		FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain
-				.class.getResource(FxmlFilePaths.clockInScreen.toString()));
-		Scene scene = new Scene(fxmlLoader.load(), 600, 500);
-		ClockInController clockInController = fxmlLoader.getController();
-		clockInController.init(databaseHandler);
-		stage.setTitle("Time Card");
-		stage.setResizable(false);
-		stage.initStyle(StageStyle.UNDECORATED);
-		stage.setScene(scene);
+		if(databaseHandler.isDBConnected()) {
+			FXMLLoader fxmlLoader = new FXMLLoader(ApplicationMain
+					.class.getResource(FxmlFilePaths.clockInScreen.toString()));
+			Scene scene = new Scene(fxmlLoader.load(), 600, 500);
+			ClockInController clockInController = fxmlLoader.getController();
+			clockInController.init(databaseHandler);
+			stage.setTitle("Time Card");
+			stage.setResizable(false);
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setScene(scene);
 
-		//grab your root here
-		scene.setOnMousePressed(event -> {
-			xOffset = event.getSceneX();
-			yOffset = event.getSceneY();
-		});
+			//grab your root here
+			scene.setOnMousePressed(event -> {
+				xOffset = event.getSceneX();
+				yOffset = event.getSceneY();
+			});
 
-		//move around here
-		scene.setOnMouseDragged(event -> {
-			stage.setX(event.getScreenX() - xOffset);
-			stage.setY(event.getScreenY() - yOffset);
-		});
+			//move around here
+			scene.setOnMouseDragged(event -> {
+				stage.setX(event.getScreenX() - xOffset);
+				stage.setY(event.getScreenY() - yOffset);
+			});
 
 
-		stage.show();
+			stage.show();
+		}
 	}
 
 	public static void main(String[] args)

@@ -9,7 +9,6 @@ import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.EncryptPassword;
 import com.project.timecard.Utils.PayrollCalendar;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -217,7 +216,7 @@ public class DatabaseHandler
 
 	public boolean updateYtdGross(String empId, double ytd_gross, LocalDate date)
 	{
-		PreparedStatement preparedStatement = null;
+		PreparedStatement preparedStatement;
 		String query = "UPDATE employee_"+empId
 				+ " set ytdGross = ? where work_date = ?";
 
@@ -322,10 +321,8 @@ public class DatabaseHandler
 
 	public String getLastShift(String empId)
 	{
-		// SELECT * FROM employee_718416 where ROWID == (SELECT MAX(ROWID) FROM employee_718416);
-
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+		PreparedStatement preparedStatement;
+		ResultSet resultSet;
 		String query = "SELECT "+EmpTableColumns.ytdGross+" FROM employee_"+empId
 				+" where ROWID == (SELECT MAX(ROWID) FROM employee_"+empId+");";
 		System.out.println(query);
@@ -423,8 +420,8 @@ public class DatabaseHandler
 
 	public Employee getEmployee(String user)
 	{
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+		PreparedStatement preparedStatement;
+		ResultSet resultSet;
 		Employee employee = null;
 		String query = "SELECT * FROM " + DatabaseFiles.EMPS_TABLE.name()
 				+ " where empID = ?";
@@ -475,6 +472,7 @@ public class DatabaseHandler
 			assert preparedStatement != null;
 			try {
 				preparedStatement.close();
+				assert resultSet != null;
 				resultSet.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -485,15 +483,14 @@ public class DatabaseHandler
 
 	public ArrayList<Shift> getPayPeriodShifts(String empId, LocalDate start, LocalDate end)
 	{
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+		PreparedStatement preparedStatement;
+		ResultSet resultSet;
 		String query = "SELECT * FROM employee_"+empId
 				+ " where work_date < ? and work_date > ?";
 		try{
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1,end.toString());
 			preparedStatement.setString(2,start.toString());
-			System.out.println(preparedStatement.toString());
 			resultSet = preparedStatement.executeQuery();
 			ArrayList<Shift> shifts = new ArrayList<>();
 			while(resultSet.next()){
