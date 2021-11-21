@@ -53,10 +53,10 @@ public class DatabaseHandler
 	{
 		String date = PayrollCalendar.isPayDay();
 		if(date != null){
-			Task<Boolean> task = new Task<Boolean>()
+			Task<Boolean> task = new Task<>()
 			{
 				@Override
-				protected Boolean call() throws Exception
+				protected Boolean call()
 				{
 					return updateDatabasePayDay(date);
 				}
