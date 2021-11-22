@@ -330,7 +330,7 @@ public class DatabaseHandler
 				preparedStatement.setString(1, null);
 			}
 			preparedStatement.setString(3,Double.toString(shift.getYtd_gross()));
-			preparedStatement.setString(4,Double.toString(shift.getEmployee().getYtd_hours()).replace(".",":"));
+			preparedStatement.setString(4,Double.toString(shift.getYtd_hours()).replace(".",":"));
 			preparedStatement.execute();
 		}catch (SQLException e){
 			e.printStackTrace();

@@ -1,6 +1,7 @@
 package com.project.timecard.Models.Objects;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -55,6 +56,8 @@ public class Shift
 		setGrossPay(calculateGrossPay());
 		ytd_hours += Double.parseDouble(getShiftDuration()
 				.toString().replace(":","."));
+		ytd_hours = new BigDecimal(ytd_hours)
+				.setScale(2, RoundingMode.HALF_UP).doubleValue();
 		ytd_gross += getGrossPay();
 		System.out.println("Gross Pay: $" + getGrossPay());
 		System.out.println("Hours worked: " + getShiftDuration());
