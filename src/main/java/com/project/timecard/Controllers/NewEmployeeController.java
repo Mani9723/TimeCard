@@ -20,9 +20,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 public class NewEmployeeController implements Initializable
 {
@@ -124,6 +126,21 @@ public class NewEmployeeController implements Initializable
 	private boolean sendEmail(Employee employee)
 	{
 		System.out.println("In email method");
+		boolean result = false;
+		try {
+			System.out.println("Checking Internet");
+			Process process = Runtime.getRuntime().exec("ping www.google.com");
+			result = process.waitFor(500, TimeUnit.MILLISECONDS);
+			if(result){
+				System.out.println("Connection Established");
+			}else{
+				System.out.println("No Internet");
+				informUser("No Internet connection to send confirmation.");
+				return false;
+			}
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 		Email email = new Email("mani.shah23@gmail.com",
 				"Welcome to Modern Prison",
 				employee.getFirstName() +
