@@ -57,6 +57,7 @@ public class PayrollCalendar
 		}
 	}
 
+	// TODO: Append "Done" after completing the payweek
 	public static String isPayDay()
 	{
 //		String date = LocalDate.now().toString();
@@ -66,11 +67,15 @@ public class PayrollCalendar
 			dates = Files.lines(Path.of(path));
 			String[] data = dates.collect(Collectors.joining("\n")).split("\n");
 			dates.close();
-			for(int i = data.length-1; i >= 0; i--){
-				int result = LocalDate.now().toString().compareTo(data[i]);
-				if(result > 0){
-					return data[i];
+			for (String datum : data) {
+				if (datum.contains("Done")) {
+					continue;
 				}
+				int result = LocalDate.now().toString().compareTo(datum);
+				if (result > 0) {
+					return datum;
+				}
+
 			}
 			System.exit(1);
 		} catch (IOException e) {

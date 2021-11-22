@@ -44,7 +44,7 @@ public class DatabaseHandler
 		try {
 			checkIfTableExists();
 			PayrollCalendar.initPayrollCalendar();
-			//	checkIfPayDay();
+			//checkIfPayDay();
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
@@ -158,8 +158,8 @@ public class DatabaseHandler
 				+ EmpTableColumns.ytdHours +" text, \n"
 				+ EmpTableColumns.ytdOvertimeHours.name() +" text, \n"
 				+ EmpTableColumns.ytdGross.name() +" text, \n"
-				+ EmpTableColumns.ytdOvertimePay.name() +" text, \n"
-				+")";
+				+ EmpTableColumns.ytdOvertimePay.name() +" text )";
+		System.out.println(query);
 		createPrepStmtExecute(query);
 		System.out.println("Statement Table created: " + user);
 	}
@@ -233,11 +233,23 @@ public class DatabaseHandler
 			preparedStatement.executeUpdate();
 			System.out.println("Employee Added\nCreating Employee Shift table");
 			createNewEmployeeShiftTable(Long.toString(employee.getEmpId()));
+			addEmployeeToPayroll(employee.getEmpId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			assert preparedStatement != null;
 			preparedStatement.close();
+		}
+	}
+
+	private void addEmployeeToPayroll(long empId)
+	{
+		String query = "ALTER TABLE PAYROLL ADD '"+ empId + "' TEXT;";
+
+		try {
+			createPrepStmtExecute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 

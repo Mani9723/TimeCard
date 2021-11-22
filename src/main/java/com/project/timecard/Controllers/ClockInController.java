@@ -136,7 +136,7 @@ public class ClockInController implements Initializable
 		}
 	}
 
-	// TODO: Make sure to handle null values from the shift class when adding to the database.
+
 	@FXML
 	void onClockInSubmitClicked(ActionEvent event)
 	{
