@@ -5,7 +5,6 @@ import com.project.timecard.Controllers.ControllerUtil.DialogBoxHandler;
 import com.project.timecard.Controllers.ControllerUtil.SceneTransitioner;
 import com.project.timecard.Models.Database.DatabaseHandler;
 import com.project.timecard.Models.Objects.Employee;
-import com.project.timecard.Models.Objects.Paystub;
 import com.project.timecard.Models.Objects.Shift;
 import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.Clock;
@@ -161,7 +160,10 @@ public class ClockInController implements Initializable
 				} else if(!selectionEvent.getSource().equals(clockInButton)){
 					shift.setEmployee(employee);
 					if (selectionEvent.getSource().equals(clockOutButton)) {
-						employee.setYtd_gross(Double.parseDouble(databaseHandler.getLastShift(id)));
+						String lastShift = databaseHandler.getLastShift(id);
+						employee.setYtd_gross(Double.parseDouble(lastShift.split(",")[0]));
+						employee.setYtd_hours(Double.parseDouble(lastShift.split(",")[1]
+								.replace(":",".")));
 						handleClockOut(id,shift);
 					} else if (selectionEvent.getSource().equals(mealInButton)) {
 						handleMealBegin(id,shift);
@@ -177,7 +179,6 @@ public class ClockInController implements Initializable
 			}else{
 				informUser("Invalid ID");
 				employeeIdField.clear();
-
 			}
 		}
 	}
@@ -191,7 +192,7 @@ public class ClockInController implements Initializable
 			shift.getTimeCard().clockOut(LocalTime.now().plusHours(new Random().nextInt(7)+5));
 			shift.calculateShiftData();
 			if (databaseHandler.updateShift(id, shift)
-					&& databaseHandler.updateYtdGross(id,shift.getYtd_gross(),shift.getDate())) {
+					&& databaseHandler.updateYtdValues(id,shift.getYtd_gross(),shift.getYtd_hours(),shift.getDate())) {
 				informUser(shift.getEmployee().getFirstName() + ": Clocked Out!");
 			} else {
 				informUser(shift.getEmployee().getFirstName() + ": Error Clocking Out");
@@ -238,9 +239,10 @@ public class ClockInController implements Initializable
 		shift.setDate(LocalDate.now());
 		shift.setEmployee(employee);
 		shift.setTimeCard(timeCard);
-		String gross = databaseHandler.getLastShift(Long.toString(employee.getEmpId()));
-		System.out.println(gross);
-		shift.setYtd_gross(Double.parseDouble(gross));
+		String lastShift = databaseHandler.getLastShift(Long.toString(employee.getEmpId()));
+		shift.setYtd_gross(Double.parseDouble(lastShift.split(",")[0]));
+		shift.setYtd_hours(Double.parseDouble(lastShift.split(",")[1]
+				.replace(":",".")));
 		if(databaseHandler.addNewShift(shift)) {
 			informUser(employee.getFirstName() + ": Clocked In!");
 		}else{

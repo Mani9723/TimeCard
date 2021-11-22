@@ -10,11 +10,9 @@ public class Employee
 	private long empId;
 	private String empPass;
 
-	public void setYtd_gross(double ytd_gross)
-	{
-		this.ytd_gross = ytd_gross;
-	}
 
+
+	private double ytd_hours;
 	private double ytd_gross;
 	private final double pay;
 
@@ -50,7 +48,20 @@ public class Employee
 	{
 		return lastName;
 	}
+	public double getYtd_hours()
+	{
+		return ytd_hours;
+	}
 
+	public void setYtd_hours(double ytd_hours)
+	{
+		this.ytd_hours = ytd_hours;
+	}
+
+	public void setYtd_gross(double ytd_gross)
+	{
+		this.ytd_gross = ytd_gross;
+	}
 	public long getEmpId()
 	{
 		return empId;

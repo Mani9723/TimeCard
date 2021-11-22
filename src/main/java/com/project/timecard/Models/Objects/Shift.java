@@ -13,6 +13,9 @@ public class Shift
 	private LocalTime mealDuration;
 	private double grossPay;
 	private double totalHours;
+
+
+	private double ytd_hours;
 	private double ytd_gross = 0.0;
 
 	public  Shift()
@@ -38,6 +41,7 @@ public class Shift
 
 	public void calculateShiftData()
 	{
+		ytd_hours = employee.getYtd_hours();
 		ytd_gross = employee.getYtd_gross();
 		LocalTime tempShiftDuration = calculateTimeDifference(timeCard.getShiftBegin()
 				,timeCard.getShiftEnd());
@@ -49,6 +53,8 @@ public class Shift
 		}
 		setShiftDuration(tempShiftDuration);
 		setGrossPay(calculateGrossPay());
+		ytd_hours += Double.parseDouble(getShiftDuration()
+				.toString().replace(":","."));
 		ytd_gross += getGrossPay();
 		System.out.println("Gross Pay: $" + getGrossPay());
 		System.out.println("Hours worked: " + getShiftDuration());
@@ -93,6 +99,15 @@ public class Shift
 	public void setEmployee(Employee employee)
 	{
 		this.employee = employee;
+	}
+	public double getYtd_hours()
+	{
+		return ytd_hours;
+	}
+
+	public void setYtd_hours(double ytd_hours)
+	{
+		this.ytd_hours = ytd_hours;
 	}
 
 

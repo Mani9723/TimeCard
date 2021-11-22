@@ -44,7 +44,7 @@ public class DatabaseHandler
 		try {
 			checkIfTableExists();
 			PayrollCalendar.initPayrollCalendar();
-			checkIfPayDay();
+			//	checkIfPayDay();
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
@@ -241,20 +241,21 @@ public class DatabaseHandler
 		}
 	}
 
-	public boolean updateYtdGross(String empId, double ytd_gross, LocalDate date)
+	public boolean updateYtdValues(String empId, double ytd_gross, double ytd_hours, LocalDate date)
 	{
 		PreparedStatement preparedStatement;
 		String query = "UPDATE employee_"+empId
-				+ " set ytdGross = ? where work_date = ?";
+				+ " set ytdGross = ?, ytdhours = ? where work_date = ?";
 
 		try{
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1,Double.toString(ytd_gross));
-			preparedStatement.setString(2,date.toString());
+			preparedStatement.setString(2,Double.toString(ytd_hours).replace(".",":"));
+			preparedStatement.setString(3,date.toString());
 			preparedStatement.executeUpdate();
 			return true;
 		}catch (SQLException e){
-		return false;
+			return false;
 		}
 	}
 
@@ -317,8 +318,8 @@ public class DatabaseHandler
 	public boolean addNewShift(Shift shift)
 	{
 		PreparedStatement preparedStatement = null;
-		String query = "INSERT INTO employee_" + shift.getEmployee().getEmpId() + "(work_date, shiftBegin,ytdGross) " +
-				"VALUES(?,?,?)";
+		String query = "INSERT INTO employee_" + shift.getEmployee().getEmpId() + "(work_date, shiftBegin,ytdGross,ytdHours) " +
+				"VALUES(?,?,?,?)";
 		try{
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1,shift.getDate().toString());
@@ -329,6 +330,7 @@ public class DatabaseHandler
 				preparedStatement.setString(1, null);
 			}
 			preparedStatement.setString(3,Double.toString(shift.getYtd_gross()));
+			preparedStatement.setString(4,Double.toString(shift.getEmployee().getYtd_hours()).replace(".",":"));
 			preparedStatement.execute();
 		}catch (SQLException e){
 			e.printStackTrace();
@@ -350,7 +352,8 @@ public class DatabaseHandler
 	{
 		PreparedStatement preparedStatement;
 		ResultSet resultSet;
-		String query = "SELECT "+EmpTableColumns.ytdGross+" FROM employee_"+empId
+		String query = "SELECT "+EmpTableColumns.ytdGross+", "
+				+ EmpTableColumns.ytdHours+" FROM employee_"+empId
 				+" where ROWID == (SELECT MAX(ROWID) FROM employee_"+empId+");";
 		System.out.println(query);
 
@@ -358,7 +361,8 @@ public class DatabaseHandler
 			preparedStatement = connection.prepareStatement(query);
 			resultSet = preparedStatement.executeQuery();
 			if(resultSet.next()){
-				return resultSet.getString("ytdGross");
+				return resultSet.getString("ytdGross") + ","
+						+ resultSet.getString("ytdHours");
 			}else{
 				return null;
 			}
