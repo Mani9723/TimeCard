@@ -25,7 +25,8 @@ EMPS_TABLE:
 Each Employees Table:
     Columns: shiftBegin, shiftEnd, mealBegin, mealEnd, hours, overtimeHours, grossPay,
              overtimePay, ytdHours, ytdOvertimeHours, ytdOvertimePay, ytdGross
-
+Payroll Database:
+    Only holds the aggregates ytd values.
 
                                 ClockIns/outs logic
 
@@ -58,5 +59,4 @@ Reqs for Meal Out:
         Must be clocked In
         Must be meal In
         must not be clocked out
-
 

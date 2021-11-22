@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 @SuppressWarnings("SqlResolve")
 public class DatabaseHandler
@@ -70,9 +71,19 @@ public class DatabaseHandler
 		LocalDate start = LocalDate.parse(date).minusWeeks(2).minusDays(5);
 		LocalDate end = LocalDate.parse(date).minusWeeks(1).plusDays(1);
 
-		Paystub paystub = new Paystub(getEmployee("718416"),getPayPeriodShifts("718416", start, end));
-		double[] info = paystub.getPayStubInfo();
-		return info.length > 0;
+		ArrayList<String> employees = getAllEmployeeIds();
+		LinkedHashMap<Employee,Paystub> payrollMap = new LinkedHashMap<>();
+		if(employees == null) {
+			System.out.println("No Employees in this company");
+		}else {
+			for (String employee : employees) {
+				Employee currEmployee = getEmployee(employee);
+				Paystub paystub = new Paystub(currEmployee,
+						getPayPeriodShifts(employee, start, end));
+				payrollMap.put(currEmployee,paystub);
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -526,5 +537,24 @@ public class DatabaseHandler
 		}
 	}
 
+
+	private ArrayList<String> getAllEmployeeIds()
+	{
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String query = "SELECT empId FROM EMPS_TABLE;";
+		ArrayList<String> empIds = new ArrayList<>();
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()){
+				empIds.add(resultSet.getString(MainTableColumns.empId.name()));
+			}
+			return empIds;
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }

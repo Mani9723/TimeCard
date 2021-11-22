@@ -24,6 +24,7 @@ import javafx.scene.shape.Rectangle;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class ClockInController implements Initializable
@@ -187,7 +188,7 @@ public class ClockInController implements Initializable
 			informUser("Please end meal break first");
 		}else if(!shift.getTimeCard().isMealBreakStarted()
 				|| (shift.getTimeCard().isMealBreakStarted() && shift.getTimeCard().isMealBreakFinished())){
-			shift.getTimeCard().clockOut(LocalTime.now());
+			shift.getTimeCard().clockOut(LocalTime.now().plusHours(new Random().nextInt(7)+5));
 			shift.calculateShiftData();
 			if (databaseHandler.updateShift(id, shift)
 					&& databaseHandler.updateYtdGross(id,shift.getYtd_gross(),shift.getDate())) {
