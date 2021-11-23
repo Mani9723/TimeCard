@@ -16,10 +16,13 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("SqlResolve")
 public class DatabaseHandler
@@ -68,8 +71,11 @@ public class DatabaseHandler
 
 	private boolean updateDatabasePayDay(String date)
 	{
-		LocalDate start = LocalDate.parse(date).minusWeeks(2).minusDays(5);
-		LocalDate end = LocalDate.parse(date).minusWeeks(1).plusDays(1);
+		String[] data = date.split(",");
+		String weekNumber = data[0];
+		LocalDate payDate = LocalDate.parse(data[1]);
+		LocalDate start = payDate.minusWeeks(2).minusDays(5);
+		LocalDate end = payDate.minusWeeks(1).plusDays(1);
 
 		ArrayList<String> employees = getAllEmployeeIds();
 		LinkedHashMap<Employee,Paystub> payrollMap = new LinkedHashMap<>();
@@ -82,8 +88,27 @@ public class DatabaseHandler
 						getPayPeriodShifts(employee, start, end));
 				payrollMap.put(currEmployee,paystub);
 			}
+			updatePayrollDatabase(weekNumber,payrollMap);
 		}
 		return true;
+	}
+
+	private void updatePayrollDatabase(String weekNumber, LinkedHashMap<Employee,Paystub> payrollMap)
+	{
+		Set<Employee> employeeSet = payrollMap.keySet();
+		for(Employee employee : employeeSet){
+			String query = "UPDATE PAYROLL set '" + employee.getEmpId() + "' where payweek = ?";
+			PreparedStatement preparedStatement;
+			try{
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setString(1,weekNumber);
+				preparedStatement.executeUpdate();
+			}catch (SQLException e){
+				e.printStackTrace();
+			}
+		}
+
+
 	}
 
 	/**

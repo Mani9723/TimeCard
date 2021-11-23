@@ -71,7 +71,7 @@ public class PayrollCalendar
 				if (datum.contains("Done")) {
 					continue;
 				}
-				int result = LocalDate.now().toString().compareTo(datum);
+				int result = LocalDate.now().toString().compareTo(datum.split(",")[1]);
 				if (result > 0) {
 					return datum;
 				}
