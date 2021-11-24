@@ -16,12 +16,10 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("SqlResolve")
@@ -47,7 +45,7 @@ public class DatabaseHandler
 		try {
 			checkIfTableExists();
 			PayrollCalendar.initPayrollCalendar();
-			//checkIfPayDay();
+			checkIfPayDay();
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
@@ -84,11 +82,15 @@ public class DatabaseHandler
 		}else {
 			for (String employee : employees) {
 				Employee currEmployee = getEmployee(employee);
-				Paystub paystub = new Paystub(currEmployee,
-						getPayPeriodShifts(employee, start, end));
-				payrollMap.put(currEmployee,paystub);
+				ArrayList<Shift> shifts = getPayPeriodShifts(employee, start, end);
+				if(shifts != null) {
+					Paystub paystub = new Paystub(currEmployee, shifts);
+					payrollMap.put(currEmployee, paystub);
+				}
 			}
-			updatePayrollDatabase(weekNumber,payrollMap);
+			if(payrollMap.size() > 0) {
+				updatePayrollDatabase(weekNumber, payrollMap);
+			}
 		}
 		return true;
 	}
@@ -97,11 +99,13 @@ public class DatabaseHandler
 	{
 		Set<Employee> employeeSet = payrollMap.keySet();
 		for(Employee employee : employeeSet){
-			String query = "UPDATE PAYROLL set '" + employee.getEmpId() + "' where payweek = ?";
+			String query = "UPDATE PAYROLL set '" + employee.getEmpId() + "' = ? where payweek = ?";
 			PreparedStatement preparedStatement;
 			try{
 				preparedStatement = connection.prepareStatement(query);
-				preparedStatement.setString(1,weekNumber);
+				String info = payrollMap.get(employee).getPayStubInfo()[0] + "," + payrollMap.get(employee).getPayStubInfo()[1];
+				preparedStatement.setString(1,info);
+				preparedStatement.setString(2,weekNumber);
 				preparedStatement.executeUpdate();
 			}catch (SQLException e){
 				e.printStackTrace();
@@ -561,15 +565,19 @@ public class DatabaseHandler
 			preparedStatement.setString(2,start.toString());
 			resultSet = preparedStatement.executeQuery();
 			ArrayList<Shift> shifts = new ArrayList<>();
-			while(resultSet.next()){
-				Shift shift = new Shift();
-				String hours = resultSet.getString(EmpTableColumns.hours.name());
-				shift.setDate(LocalDate.parse(resultSet.getString(EmpTableColumns.work_date.name())));
-				shift.setGrossPay(Double.parseDouble(resultSet.getString(EmpTableColumns.grossPay.name())));
-				shift.setShiftDuration(LocalTime.of(Integer.parseInt(hours.split(":")[0])
-						,Integer.parseInt(hours.split(":")[1])));
-				shift.setYtd_gross(Double.parseDouble(resultSet.getString(EmpTableColumns.ytdGross.name())));
-				shifts.add(shift);
+			if(resultSet.wasNull()){
+				return null;
+			}else {
+				while (resultSet.next()) {
+					Shift shift = new Shift();
+					String hours = resultSet.getString(EmpTableColumns.hours.name());
+					shift.setDate(LocalDate.parse(resultSet.getString(EmpTableColumns.work_date.name())));
+					shift.setGrossPay(Double.parseDouble(resultSet.getString(EmpTableColumns.grossPay.name())));
+					shift.setShiftDuration(LocalTime.of(Integer.parseInt(hours.split(":")[0])
+							, Integer.parseInt(hours.split(":")[1])));
+					shift.setYtd_gross(Double.parseDouble(resultSet.getString(EmpTableColumns.ytdGross.name())));
+					shifts.add(shift);
+				}
 			}
 			return shifts;
 		}catch (SQLException e){

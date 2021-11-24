@@ -240,9 +240,14 @@ public class ClockInController implements Initializable
 		shift.setEmployee(employee);
 		shift.setTimeCard(timeCard);
 		String lastShift = databaseHandler.getLastShift(Long.toString(employee.getEmpId()));
-		shift.setYtd_gross(Double.parseDouble(lastShift.split(",")[0]));
-		shift.setYtd_hours(Double.parseDouble(lastShift.split(",")[1]
-				.replace(":",".")));
+		if(lastShift == null){
+			shift.setYtd_gross(0.0);
+			shift.setYtd_hours(0.0);
+		}else {
+			shift.setYtd_gross(Double.parseDouble(lastShift.split(",")[0]));
+			shift.setYtd_hours(Double.parseDouble(lastShift.split(",")[1]
+					.replace(":", ".")));
+		}
 		if(databaseHandler.addNewShift(shift)) {
 			informUser(employee.getFirstName() + ": Clocked In!");
 		}else{
