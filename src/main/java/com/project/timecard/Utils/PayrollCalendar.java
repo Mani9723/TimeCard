@@ -1,18 +1,14 @@
 package com.project.timecard.Utils;
 
+import com.project.timecard.Models.Database.DatabaseHandler;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PayrollCalendar
@@ -57,31 +53,9 @@ public class PayrollCalendar
 		}
 	}
 
-	// TODO: Append "Done" after completing the payweek
-	public static String isPayDay()
+	public static String isPayDay(DatabaseHandler databaseHandler)
 	{
-//		String date = LocalDate.now().toString();
-		Stream<String> dates = null;
-		try {
-//			dates = Files.lines(Path.of(path)).filter(s -> s.trim().contains(date));
-			dates = Files.lines(Path.of(path));
-			String[] data = dates.collect(Collectors.joining("\n")).split("\n");
-			dates.close();
-			for (String datum : data) {
-				if (datum.contains("Done")) {
-					continue;
-				}
-				int result = LocalDate.now().toString().compareTo(datum.split(",")[1]);
-				if (result > 0) {
-					return datum;
-				}
-
-			}
-			System.exit(1);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		assert dates != null;
-		return null;
+		LocalDate payDate = databaseHandler.getPayDate();
+		return payDate.toString();
 	}
 }

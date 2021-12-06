@@ -1,6 +1,5 @@
 update payroll database with gross pay and hours for each employee = Done
-TODO: Fix duplicate employee registration issue in the main database
-TODO: Remove unnecessary columns from the employee specific table
+Fix duplicate employee registration issue in the main database = DONE
 Fix payrollcalendar.txt file format to include the week number = DONE
 TODO: Append payweek completion status to the payrollcalendar.txt file
 

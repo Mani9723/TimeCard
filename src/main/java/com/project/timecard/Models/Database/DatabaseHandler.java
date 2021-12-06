@@ -33,7 +33,7 @@ public class DatabaseHandler
 	private static Connection connection;
 
 	/**
-	 * Default Constructor. Establishes a connection with the database.
+	 * Establishes a connection with the database.
 	 */
 	public DatabaseHandler()
 	{
@@ -53,25 +53,21 @@ public class DatabaseHandler
 
 	private void checkIfPayDay()
 	{
-		String date = PayrollCalendar.isPayDay();
-		if(date != null){
-			Task<Boolean> task = new Task<>()
+		String date = PayrollCalendar.isPayDay(this);
+		Task<Boolean> task = new Task<>()
+		{
+			@Override
+			protected Boolean call()
 			{
-				@Override
-				protected Boolean call()
-				{
-					return updateDatabasePayDay(date);
-				}
-			};
-			new Thread(task).start();
-		}
+				return updateDatabasePayDay(date);
+			}
+		};
+		new Thread(task).start();
 	}
 
 	private boolean updateDatabasePayDay(String date)
 	{
-		String[] data = date.split(",");
-		String weekNumber = data[0];
-		LocalDate payDate = LocalDate.parse(data[1]);
+		LocalDate payDate = LocalDate.parse(date);
 		LocalDate start = payDate.minusWeeks(2).minusDays(5);
 		LocalDate end = payDate.minusWeeks(1).plusDays(1);
 
@@ -80,6 +76,7 @@ public class DatabaseHandler
 		if(employees == null) {
 			System.out.println("No Employees in this company");
 		}else {
+			System.out.println("Calculating employee Paystubs");
 			for (String employee : employees) {
 				Employee currEmployee = getEmployee(employee);
 				ArrayList<Shift> shifts = getPayPeriodShifts(employee, start, end);
@@ -89,30 +86,30 @@ public class DatabaseHandler
 				}
 			}
 			if(payrollMap.size() > 0) {
-				updatePayrollDatabase(weekNumber, payrollMap);
+				System.out.println("Updating Payroll Database");
+				updatePayrollDatabase(date, payrollMap);
 			}
 		}
 		return true;
 	}
 
-	private void updatePayrollDatabase(String weekNumber, LinkedHashMap<Employee,Paystub> payrollMap)
+	private void updatePayrollDatabase(String payDate, LinkedHashMap<Employee,Paystub> payrollMap)
 	{
 		Set<Employee> employeeSet = payrollMap.keySet();
 		for(Employee employee : employeeSet){
-			String query = "UPDATE PAYROLL set '" + employee.getEmpId() + "' = ? where payweek = ?";
+			String query = "UPDATE PAYROLL set paid = 1, '" + employee.getEmpId() + "' = ? where payweek = ?";
 			PreparedStatement preparedStatement;
 			try{
 				preparedStatement = connection.prepareStatement(query);
 				String info = payrollMap.get(employee).getPayStubInfo()[0] + "," + payrollMap.get(employee).getPayStubInfo()[1];
 				preparedStatement.setString(1,info);
-				preparedStatement.setString(2,weekNumber);
+				preparedStatement.setString(2,payDate);
 				preparedStatement.executeUpdate();
+				System.out.println("Payroll database updated");
 			}catch (SQLException e){
 				e.printStackTrace();
 			}
 		}
-
-
 	}
 
 	/**
@@ -137,6 +134,7 @@ public class DatabaseHandler
 		}
 		resultSet.close();
 	}
+
 
 	public boolean isDBConnected()
 	{
@@ -240,6 +238,27 @@ public class DatabaseHandler
 			resultSet.close();
 		}
 		return false;
+	}
+
+	public LocalDate getPayDate()
+	{
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String query = "SELECT payweek,paid from PAYROLL " +
+				"where paid < 1 and payweek < CURRENT_DATE;";
+
+		try {
+			preparedStatement = connection.prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) {
+				if(resultSet.getInt("paid") == 0){
+					return LocalDate.parse(resultSet.getString("payweek"));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void addNewEmployee(Employee employee) throws SQLException
