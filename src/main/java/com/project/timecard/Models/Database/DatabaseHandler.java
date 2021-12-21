@@ -50,15 +50,17 @@ public class DatabaseHandler
 	private void checkIfPayDay()
 	{
 		String date = PayrollCalendar.isPayDay(this);
-		Task<Boolean> task = new Task<>()
-		{
-			@Override
-			protected Boolean call()
+		if(!date.equalsIgnoreCase("Empty")) {
+			Task<Boolean> task = new Task<>()
 			{
-				return updateDatabasePayDay(date);
-			}
-		};
-		new Thread(task).start();
+				@Override
+				protected Boolean call()
+				{
+					return updateDatabasePayDay(date);
+				}
+			};
+			new Thread(task).start();
+		}
 	}
 
 	public void updatePayrollCalendarDates(ArrayList<LocalDate> dates)
@@ -103,6 +105,8 @@ public class DatabaseHandler
 			if(payrollMap.size() > 0) {
 				System.out.println("Updating Payroll Database");
 				updatePayrollDatabase(date, payrollMap);
+			}else{
+				System.out.println("No employees worked during this pay period.");
 			}
 		}
 		return true;

@@ -47,7 +47,7 @@ public class PayrollCalendar
 	public static String isPayDay(DatabaseHandler databaseHandler)
 	{
 		LocalDate payDate = databaseHandler.getPayDate();
-		return payDate.toString();
+		return payDate == null ? "Empty" : payDate.toString();
 	}
 
 	//	public static void initPayrollCalendar()
