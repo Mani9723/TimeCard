@@ -60,6 +60,8 @@ public class DatabaseHandler
 				}
 			};
 			new Thread(task).start();
+		}else{
+			System.out.println("No Payroll Dates left this year");
 		}
 	}
 
