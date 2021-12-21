@@ -11,11 +11,7 @@ import com.project.timecard.Utils.EncryptPassword;
 import com.project.timecard.Utils.PayrollCalendar;
 import javafx.concurrent.Task;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -44,7 +40,7 @@ public class DatabaseHandler
 		}
 		try {
 			checkIfTableExists();
-			PayrollCalendar.initPayrollCalendar();
+			PayrollCalendar.updatePayrollCalendar(this);
 			checkIfPayDay();
 		}catch (SQLException e){
 			e.printStackTrace();
@@ -63,6 +59,25 @@ public class DatabaseHandler
 			}
 		};
 		new Thread(task).start();
+	}
+
+	public void updatePayrollCalendarDates(ArrayList<LocalDate> dates)
+	{
+		PreparedStatement preparedStatement = null;
+		int rowId = 1;
+		for (LocalDate date : dates) {
+			System.out.println("Updating date: " + date + " at row: " + rowId);
+			String query = "UPDATE PAYROLL set payweek = ? where ROWID = ?";
+			try {
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setString(1,date.toString());
+				preparedStatement.setInt(2,rowId++);
+				preparedStatement.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	private boolean updateDatabasePayDay(String date)
@@ -93,6 +108,24 @@ public class DatabaseHandler
 		return true;
 	}
 
+	public LocalDate getLastDateOfPayroll()
+	{
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		String query = "SELECT payweek FROM PAYROLL " +
+				"where ROWID = (SELECT MAX(ROWID) FROM PAYROLL)";
+
+		try{
+			preparedStatement = connection.prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
+			return LocalDate.parse(resultSet.getString("payweek"));
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	private void updatePayrollDatabase(String payDate, LinkedHashMap<Employee,Paystub> payrollMap)
 	{
 		Set<Employee> employeeSet = payrollMap.keySet();
@@ -101,7 +134,8 @@ public class DatabaseHandler
 			PreparedStatement preparedStatement;
 			try{
 				preparedStatement = connection.prepareStatement(query);
-				String info = payrollMap.get(employee).getPayStubInfo()[0] + "," + payrollMap.get(employee).getPayStubInfo()[1];
+				double[] data = payrollMap.get(employee).getPayStubInfo();
+				String info =  data[0] + "," + data[1];
 				preparedStatement.setString(1,info);
 				preparedStatement.setString(2,payDate);
 				preparedStatement.executeUpdate();

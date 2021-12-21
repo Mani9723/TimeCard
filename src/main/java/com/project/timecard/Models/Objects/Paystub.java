@@ -87,6 +87,7 @@ public class Paystub
 	{
 		return "Paystub{" +
 				"employee=" + employee +
+				", shifts=" + shifts +
 				", totalHours=" + totalHours +
 				", totalGross=" + totalGross +
 				", netPay=" + netPay +
