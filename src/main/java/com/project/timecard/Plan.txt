@@ -1,9 +1,3 @@
-update payroll database with gross pay and hours for each employee = Done
-Fix duplicate employee registration issue in the main database = DONE
-Fix payrollcalendar.txt file format to include the week number = DONE
-TODO: Append payweek completion status to the payrollcalendar.txt file
-
-
                                 UI
 1) Login screen
 2) Home screen:
