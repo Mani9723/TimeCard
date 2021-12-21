@@ -102,6 +102,8 @@ public class DatabaseHandler
 				if(shifts.size() > 0) {
 					Paystub paystub = new Paystub(currEmployee, shifts);
 					payrollMap.put(currEmployee, paystub);
+				}else{
+					updatePayrollDatabaseEmptyValues(date,employees);
 				}
 			}
 			if(payrollMap.size() > 0) {
@@ -130,6 +132,25 @@ public class DatabaseHandler
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private void updatePayrollDatabaseEmptyValues(String date, ArrayList<String> employees)
+	{
+		System.out.println("Updating payroll with zeros");
+		for (String employee : employees) {
+			String query = "UPDATE PAYROLL set paid = 2, '" + employee + "' = ? where payweek = ?";
+			PreparedStatement preparedStatement;
+			try{
+				preparedStatement = connection.prepareStatement(query);
+				String info =  "0.0,0.0";
+				preparedStatement.setString(1,info);
+				preparedStatement.setString(2,date);
+				preparedStatement.executeUpdate();
+			}catch (SQLException e){
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	private void updatePayrollDatabase(String payDate, LinkedHashMap<Employee,Paystub> payrollMap)

@@ -8,9 +8,6 @@ import java.util.ArrayList;
 
 public class PayrollCalendar
 {
-
-	private static final String path = "src/main/java/com/project/timecard/Utils/TextFiles/payrollCalendar.txt";
-
 	public static void updatePayrollCalendar(DatabaseHandler databaseHandler)
 	{
 		System.out.println("Checking if dates needs update");
