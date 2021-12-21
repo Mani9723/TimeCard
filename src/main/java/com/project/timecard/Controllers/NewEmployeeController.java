@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-public class NewEmployeeController implements Initializable
+public class NewEmployeeController implements Initializable, SceneInterface
 {
 	@FXML
 	public JFXButton loginReturnButton;
@@ -151,7 +151,7 @@ public class NewEmployeeController implements Initializable
 		return emailSender.send();
 	}
 
-	private void informUser(String message)
+	public void informUser(String message)
 	{
 		dialogBoxHandler.OkButton(message,new JFXDialog());
 	}

@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 /**
  * Handles the login page
  */
-public class LoginController implements Initializable
+public class LoginController implements Initializable, SceneInterface
 {
 
 	@FXML
@@ -141,7 +141,7 @@ public class LoginController implements Initializable
 		}
 	}
 
-	private void informUser(String message)
+	public void informUser(String message)
 	{
 		dialogBoxHandler.OkButton(message, new JFXDialog());
 	}

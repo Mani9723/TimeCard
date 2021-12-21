@@ -26,7 +26,7 @@ import java.time.LocalTime;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class ClockInController implements Initializable
+public class ClockInController implements Initializable, SceneInterface
 {
 	@FXML
 	private StackPane clockInStackPane;
@@ -255,7 +255,7 @@ public class ClockInController implements Initializable
 		}
 	}
 
-	private void informUser(String message)
+	public void informUser(String message)
 	{
 		dialogBoxHandler.OkButton(message,new JFXDialog());
 	}
