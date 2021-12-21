@@ -99,7 +99,7 @@ public class DatabaseHandler
 			for (String employee : employees) {
 				Employee currEmployee = getEmployee(employee);
 				ArrayList<Shift> shifts = getPayPeriodShifts(employee, start, end);
-				if(shifts != null) {
+				if(shifts.size() > 0) {
 					Paystub paystub = new Paystub(currEmployee, shifts);
 					payrollMap.put(currEmployee, paystub);
 				}
@@ -624,20 +624,17 @@ public class DatabaseHandler
 			preparedStatement.setString(2,start.toString());
 			resultSet = preparedStatement.executeQuery();
 			ArrayList<Shift> shifts = new ArrayList<>();
-			if(resultSet.wasNull()){
-				return null;
-			}else {
-				while (resultSet.next()) {
-					Shift shift = new Shift();
-					String hours = resultSet.getString(EmpTableColumns.hours.name());
-					shift.setDate(LocalDate.parse(resultSet.getString(EmpTableColumns.work_date.name())));
-					shift.setGrossPay(Double.parseDouble(resultSet.getString(EmpTableColumns.grossPay.name())));
-					shift.setShiftDuration(LocalTime.of(Integer.parseInt(hours.split(":")[0])
-							, Integer.parseInt(hours.split(":")[1])));
-					shift.setYtd_gross(Double.parseDouble(resultSet.getString(EmpTableColumns.ytdGross.name())));
-					shifts.add(shift);
-				}
+			while (resultSet.next()) {
+				Shift shift = new Shift();
+				String hours = resultSet.getString(EmpTableColumns.hours.name());
+				shift.setDate(LocalDate.parse(resultSet.getString(EmpTableColumns.work_date.name())));
+				shift.setGrossPay(Double.parseDouble(resultSet.getString(EmpTableColumns.grossPay.name())));
+				shift.setShiftDuration(LocalTime.of(Integer.parseInt(hours.split(":")[0])
+						, Integer.parseInt(hours.split(":")[1])));
+				shift.setYtd_gross(Double.parseDouble(resultSet.getString(EmpTableColumns.ytdGross.name())));
+				shifts.add(shift);
 			}
+
 			return shifts;
 		}catch (SQLException e){
 			e.printStackTrace();
