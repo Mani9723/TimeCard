@@ -71,7 +71,7 @@ public class DatabaseHandler
 		int rowId = 1;
 		for (LocalDate date : dates) {
 			System.out.println("Updating date: " + date + " at row: " + rowId);
-			String query = "UPDATE PAYROLL set payweek = ? where ROWID = ?";
+			String query = "UPDATE PAYROLL set payweek = ?, paid = 0 where ROWID = ?";
 			try {
 				preparedStatement = connection.prepareStatement(query);
 				preparedStatement.setString(1,date.toString());
