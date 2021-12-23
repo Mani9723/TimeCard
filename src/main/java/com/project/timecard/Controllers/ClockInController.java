@@ -187,8 +187,9 @@ public class ClockInController implements Initializable, SceneInterface
 	{
 		if(shift.getTimeCard().isMealBreakStarted() && !shift.getTimeCard().isMealBreakFinished()){
 			informUser("Please end meal break first");
-		}else if(!shift.getTimeCard().isMealBreakStarted()
-				|| (shift.getTimeCard().isMealBreakStarted() && shift.getTimeCard().isMealBreakFinished())){
+		}else if((!shift.getTimeCard().isMealBreakStarted()
+				|| (shift.getTimeCard().isMealBreakStarted() && shift.getTimeCard().isMealBreakFinished()))
+				&& !shift.getTimeCard().isClockedOut()){
 			shift.getTimeCard().clockOut(LocalTime.now().plusHours(new Random().nextInt(7)+5));
 			shift.calculateShiftData();
 			if (databaseHandler.updateShift(id, shift)
@@ -197,6 +198,8 @@ public class ClockInController implements Initializable, SceneInterface
 			} else {
 				informUser(shift.getEmployee().getFirstName() + ": Error Clocking Out");
 			}
+		}else{
+			informUser("Erorr Clocking out");
 		}
 	}
 

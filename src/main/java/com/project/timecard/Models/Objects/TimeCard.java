@@ -10,6 +10,8 @@ public class TimeCard
 	private LocalTime mealBreakEnd;
 	private boolean isMealBreakStarted;
 	private boolean isMealBreakFinished;
+	private boolean isClockedOut;
+	
 
 	public TimeCard()
 	{
@@ -19,6 +21,7 @@ public class TimeCard
 		this.mealBreakEnd = null;
 		this.isMealBreakStarted = false;
 		this.isMealBreakFinished = false;
+		this.isClockedOut = false;
 	}
 
 	public void clockIn(LocalTime shiftBegin)
@@ -29,6 +32,7 @@ public class TimeCard
 	public void clockOut(LocalTime shiftEnd)
 	{
 		this.shiftEnd = shiftEnd;
+		this.isClockedOut = true;
 	}
 
 	public void clockMealBreakBegin(LocalTime mealBreakBegin)
@@ -71,6 +75,11 @@ public class TimeCard
 	public boolean isMealBreakFinished()
 	{
 		return isMealBreakFinished;
+	}
+	
+	public boolean isClockedOut()
+	{
+		return isClockedOut;
 	}
 
 	@Override
