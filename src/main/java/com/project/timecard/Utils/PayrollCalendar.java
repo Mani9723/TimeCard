@@ -14,9 +14,8 @@ public class PayrollCalendar
 		LocalDate date = databaseHandler.getLastDateOfPayroll();
 		if(date.getYear() < LocalDate.now().getYear()){
 			System.out.println("Calculating new dates");
-			ArrayList<LocalDate> dates = getFridayPaydays();
-			System.out.print("Updating dates Payroll Database:\n"+dates);
-			databaseHandler.updatePayrollCalendarDates(dates);
+			System.out.println("Updating dates Payroll Database");
+			databaseHandler.updatePayrollCalendarDates(getFridayPaydays());
 		}
 	}
 
