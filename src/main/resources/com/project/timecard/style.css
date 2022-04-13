@@ -1,0 +1,13 @@
+.transparent{
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.empIdBox{
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 100;
+}
+
+.close-button{
+    -fx-background-color: #fa7777;
+    -fx-background-radius: 32;
+}

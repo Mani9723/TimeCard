@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -25,7 +26,7 @@
                   <Image url="@Images/grass-wallpaper-1.jpg" />
                </image>
             </ImageView>
-             <JFXButton fx:id="exitButton" layoutX="553.0" layoutY="14.0" onAction="#onExitButtonClicked" prefHeight="25.0" prefWidth="32.0" text="X" AnchorPane.bottomAnchor="461" AnchorPane.leftAnchor="553" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="14" />
+             <JFXButton fx:id="exitButton" layoutX="541.0" layoutY="14.0"  onAction="#onExitButtonClicked" prefHeight="25.0" prefWidth="32.0" text="X" AnchorPane.bottomAnchor="461" AnchorPane.leftAnchor="553" stylesheets="@style.css" styleClass="close-button" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="14" />
              <Label alignment="CENTER" layoutX="155.0" layoutY="22.0" prefHeight="35.0" prefWidth="190.0" text="Time Card Systems" textFill="WHITE" AnchorPane.bottomAnchor="443" AnchorPane.leftAnchor="155" AnchorPane.rightAnchor="155" AnchorPane.topAnchor="22">
                  <font>
                      <Font size="20.0" />
@@ -55,7 +56,11 @@
                         <GaussianBlur />
                      </effect>
                   </Rectangle>
-                  <TextField fx:id="empIdField" alignment="CENTER" promptText="Employee ID" />
+                  <TextField fx:id="empIdField" alignment="CENTER" promptText="Employee ID" stylesheets="@style.css">
+                     <styleClass>
+                        <String fx:value="empIdBox" />
+                        <String fx:value="transparent" />
+                     </styleClass></TextField>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00efff" height="25.0" opacity="0.37" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="111.0" GridPane.rowIndex="2">
                      <effect>
                         <GaussianBlur />
@@ -64,7 +69,11 @@
                         <Insets left="43.0" />
                      </GridPane.margin>
                   </Rectangle>
-                  <PasswordField fx:id="empPassField" alignment="CENTER" onKeyReleased="#onEnterKeyReleased" promptText="Password" GridPane.rowIndex="1" />
+                  <PasswordField fx:id="empPassField" alignment="CENTER" onKeyReleased="#onEnterKeyReleased" promptText="Password" stylesheets="@style.css" GridPane.rowIndex="1">
+                     <styleClass>
+                        <String fx:value="empIdBox" />
+                        <String fx:value="transparent" />
+                     </styleClass></PasswordField>
                   <JFXButton fx:id="loginButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#onLoginClicked" prefHeight="25.0" prefWidth="111.0" text="Login" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="43.0" />

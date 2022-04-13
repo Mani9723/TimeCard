@@ -11,9 +11,9 @@ public class PayrollCalendar
 	public static void updatePayrollCalendar(DatabaseHandler databaseHandler)
 	{
 		System.out.println("Checking if dates needs update");
-		LocalDate date = databaseHandler.getLastDateOfPayroll();
-		if(date.getYear() < LocalDate.now().getYear()){
-			System.out.println("Calculating new dates");
+		Pair data = databaseHandler.getLastDateOfPayroll();
+		LocalDate date = (LocalDate)(data.getData1());
+		if(date.getYear() < LocalDate.now().getYear() || (int)data.getData2() > 0){
 			System.out.println("Updating dates Payroll Database");
 			databaseHandler.updatePayrollCalendarDates(getFridayPaydays());
 		}
@@ -21,8 +21,8 @@ public class PayrollCalendar
 
 	private static ArrayList<LocalDate> getFridayPaydays()
 	{
-		LocalDate start = LocalDate.of(LocalDate.now().getYear(), 1, 1);
-		LocalDate end = LocalDate.of(LocalDate.now().getYear(), 12,31);
+		LocalDate start = LocalDate.of(LocalDate.now().getYear()+1, 1, 1);
+		LocalDate end = LocalDate.of(LocalDate.now().getYear()+1, 12,31);
 
 		DayOfWeek dowOfStart = start.getDayOfWeek();
 		int difference = DayOfWeek.FRIDAY.getValue() - dowOfStart.getValue();

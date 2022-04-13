@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.GaussianBlur?>
@@ -21,7 +22,8 @@
                   <Image url="@Images/grass-wallpaper-1.jpg" />
                </image>
             </ImageView>
-                <JFXButton fx:id="clockInExitButton" layoutX="553.0" layoutY="14.0" onAction="#onExitClicked" prefHeight="25.0" prefWidth="32.0" text="X" AnchorPane.bottomAnchor="461" AnchorPane.leftAnchor="553" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="14" />
+                <JFXButton fx:id="clockInExitButton" buttonType="RAISED" layoutX="541.0" layoutY="14.0" onAction="#onExitClicked"  prefHeight="25.0" prefWidth="32.0" styleClass="close-button" stylesheets="@style.css" text="X" textFill="WHITE" AnchorPane.bottomAnchor="451.0" AnchorPane.leftAnchor="541.0" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="14">
+                 </JFXButton>
                 <Label alignment="CENTER" layoutX="155.0" layoutY="22.0" prefHeight="35.0" prefWidth="190.0" text="Time Card Systems" textFill="white" AnchorPane.bottomAnchor="443" AnchorPane.leftAnchor="155" AnchorPane.rightAnchor="155" AnchorPane.topAnchor="22">
                     <font>
                         <Font size="20.0" />
@@ -52,11 +54,11 @@
                            <effect>
                               <GaussianBlur />
                            </effect></Rectangle>
-                        <Rectangle fx:id="clockInRect" arcHeight="5.0" arcWidth="5.0" fill="#00ffef" height="36.0" layoutX="161.0" layoutY="28.0" opacity="0.7" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="93.0" AnchorPane.bottomAnchor="134.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="255.33333333333331" AnchorPane.topAnchor="28.0">
+                        <Rectangle fx:id="clockInRect" arcHeight="5.0" arcWidth="5.0" fill="#00ffef" height="36.0" layoutX="161.0" layoutY="28.0" opacity="0.7" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="93.0" AnchorPane.bottomAnchor="134.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="255.33333333333331" AnchorPane.topAnchor="28.0">
                            <effect>
                               <GaussianBlur />
                            </effect></Rectangle>
-                        <JFXButton fx:id="clockInButton" buttonType="RAISED" layoutX="161.0" layoutY="27.0" onAction="#onTimeButtonsClicked" prefHeight="36.0" prefWidth="93.0" ripplerFill="#0098ff" text="Clock In" AnchorPane.bottomAnchor="134.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="255.0" AnchorPane.topAnchor="27.0">
+                        <JFXButton fx:id="clockInButton" buttonType="RAISED" layoutX="161.0" layoutY="27.0" onAction="#onTimeButtonsClicked" prefHeight="36.0" prefWidth="93.0" ripplerFill="#0098ff" stylesheets="@style.css" text="Clock In" AnchorPane.bottomAnchor="134.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="255.0" AnchorPane.topAnchor="27.0">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -76,7 +78,11 @@
                               <Font size="14.0" />
                            </font>
                         </JFXButton>
-                        <TextField fx:id="employeeIdField" alignment="CENTER" layoutX="187.0" layoutY="128.0" onKeyReleased="#handleIdKeyRelease" promptText="Employee ID" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="187.0" AnchorPane.rightAnchor="172.99999999999994" AnchorPane.topAnchor="128.0" />
+                        <TextField fx:id="employeeIdField" alignment="CENTER" layoutX="187.0" layoutY="128.0" onKeyReleased="#handleIdKeyRelease" opacity="0.85" promptText="Employee ID" stylesheets="@style.css" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="187.0" AnchorPane.rightAnchor="172.99999999999994" AnchorPane.topAnchor="128.0">
+                           <styleClass>
+                              <String fx:value="transparent" />
+                              <String fx:value="empIdBox" />
+                           </styleClass></TextField>
                         <JFXButton fx:id="clockInSubmitButton" alignment="CENTER" buttonType="RAISED" layoutX="215.0" layoutY="165.0" onAction="#onClockInSubmitClicked" prefHeight="24.0" prefWidth="93.0" ripplerFill="#00cfff" text="Submit" AnchorPane.bottomAnchor="9.0" />
                      </children>
                   </AnchorPane>

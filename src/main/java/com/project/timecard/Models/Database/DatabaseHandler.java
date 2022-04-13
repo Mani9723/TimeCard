@@ -8,6 +8,7 @@ import com.project.timecard.Models.Objects.Paystub;
 import com.project.timecard.Models.Objects.Shift;
 import com.project.timecard.Models.Objects.TimeCard;
 import com.project.timecard.Utils.EncryptPassword;
+import com.project.timecard.Utils.Pair;
 import com.project.timecard.Utils.PayrollCalendar;
 import javafx.concurrent.Task;
 
@@ -67,15 +68,13 @@ public class DatabaseHandler
 
 	public void updatePayrollCalendarDates(ArrayList<LocalDate> dates)
 	{
-		PreparedStatement preparedStatement = null;
-		int rowId = 1;
+		PreparedStatement preparedStatement;
 		for (LocalDate date : dates) {
-			System.out.println("Updating date: " + date + " at row: " + rowId);
-			String query = "UPDATE PAYROLL set payweek = ?, paid = 0 where ROWID = ?";
+			String query = "INSERT INTO PAYROLL (payweek, paid) VALUES (?,0)";
+//			String query = "UPDATE PAYROLL set payweek = ?, paid = 0 where ROWID = ?";
 			try {
 				preparedStatement = connection.prepareStatement(query);
 				preparedStatement.setString(1,date.toString());
-				preparedStatement.setInt(2,rowId++);
 				preparedStatement.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -116,18 +115,19 @@ public class DatabaseHandler
 		return true;
 	}
 
-	public LocalDate getLastDateOfPayroll()
+	public Pair<LocalDate,Integer> getLastDateOfPayroll()
 	{
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
-		String query = "SELECT payweek FROM PAYROLL " +
+		String query = "SELECT payweek,paid FROM PAYROLL " +
 				"where ROWID = (SELECT MAX(ROWID) FROM PAYROLL)";
 
 		try{
 			preparedStatement = connection.prepareStatement(query);
 			resultSet = preparedStatement.executeQuery();
-			return LocalDate.parse(resultSet.getString("payweek"));
+			return new Pair<>(LocalDate.parse(resultSet.getString("payweek"))
+					,resultSet.getInt("paid"));
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
@@ -150,6 +150,11 @@ public class DatabaseHandler
 				e.printStackTrace();
 			}
 		}
+
+	}
+
+	public void deleteDatabase()
+	{
 
 	}
 

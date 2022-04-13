@@ -40,18 +40,27 @@ public class DialogBoxHandler
 	{
 		this.dialog = dialog;
 		JFXDialogLayout dialogLayout = new JFXDialogLayout();
+		dialogLayout.requestFocus();
 		JFXButton button = new JFXButton("Return");
+		button.setStyle("-fx-background-color: #c7daf8");
+		button.setStyle("-fx-background-radius: 32");
 //		button.setAlignment(Pos.CENTER);
 //		button.setPrefSize(70,35);
 		button.setTextFill(Paint.valueOf("black"));
 		button.setButtonType(JFXButton.ButtonType.RAISED);
-		button.setBackground(new Background(new BackgroundFill(Paint.valueOf("#e9e9e9"),null,null)));
+//		button.setBackground(new Background(new BackgroundFill(Paint.valueOf("#e9e9e9"),null,null)));
 		this.dialog = new JFXDialog(stackPane,dialogLayout,dialogTransition());
 		this.dialog.toFront();
 		this.dialog.requestFocus();
+		this.dialog.setTransitionType(JFXDialog.DialogTransition.TOP);
 		button.setFocusTraversable(true);
 
 		button.addEventHandler(MouseEvent.MOUSE_CLICKED,(MouseEvent mouseEvent )->{
+			parent.setEffect(null);
+			this.dialog.close();
+		});
+
+		button.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent keyEvent )->{
 			parent.setEffect(null);
 			this.dialog.close();
 		});
